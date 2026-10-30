@@ -8,9 +8,9 @@ A copilot for recruiters at a LatAm staffing agency. It reads each candidate's w
 
 | Step | What | State |
 |---|---|---|
-| 1 | Repo, Docker, first Claude call (input gate) | done |
-| 2 | Role config (criteria + hard rules) | next |
-| 3 | Sample candidates | |
+| 1 | Repo, Docker, first model call (input gate) | done |
+| 2 | Role config (questionnaire, criteria, hard rules, bias check) | done |
+| 3 | Sample candidates | next |
 | 4 | Read: structured extraction | |
 | 5 | Hard rules in code | |
 | 6 | Evaluate each criterion with quotes | |

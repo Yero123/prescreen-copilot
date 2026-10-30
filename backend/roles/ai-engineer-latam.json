@@ -1,0 +1,77 @@
+{
+  "id": "ai-engineer-latam",
+  "title": "AI Engineer (mid to senior, remote, LatAm)",
+  "version": 1,
+  "questionnaire": [
+    {
+      "id": "Q1",
+      "text": "Tell us about an LLM feature you shipped to production. What did it do, who used it, and what was your part?"
+    },
+    {
+      "id": "Q2",
+      "text": "How did you know its output was good enough? Describe how you measured quality."
+    },
+    {
+      "id": "Q3",
+      "text": "What is the hardest AI-related problem you have solved, and how?"
+    },
+    {
+      "id": "Q4",
+      "text": "When do you choose plain code, an agent, or retrieval? Give one real example of a deliberate choice."
+    },
+    {
+      "id": "Q5",
+      "text": "Where are you based, what is your hourly rate in USD, how do you rate your English from 1 to 10, and how many hours a day can you overlap with US Eastern time?"
+    }
+  ],
+  "criteria": [
+    {
+      "id": "shipped_llm",
+      "importance": "must",
+      "text": "Has shipped LLM features to production",
+      "evidence_signals": [
+        "names a specific system or feature they built",
+        "says who used it or at what volume",
+        "describes their own part, not only the team's"
+      ],
+      "main_questions": ["Q1", "Q3"]
+    },
+    {
+      "id": "measures_quality",
+      "importance": "must",
+      "text": "Measures output quality (evals, test sets, agreement with humans)",
+      "evidence_signals": [
+        "mentions a test set, labeled examples or a golden set",
+        "names a metric and how it changed",
+        "compares model output with human reviewers"
+      ],
+      "main_questions": ["Q2"]
+    },
+    {
+      "id": "deliberate_design",
+      "importance": "should",
+      "text": "Chooses between code, agents and retrieval on purpose",
+      "evidence_signals": [
+        "gives a real example of choosing one approach over another",
+        "explains the reason (cost, reliability, exactness)"
+      ],
+      "main_questions": ["Q4"]
+    },
+    {
+      "id": "open_weight",
+      "importance": "nice",
+      "text": "Has tried open-weight models",
+      "evidence_signals": [
+        "names an open-weight model they ran or compared",
+        "reports a result of that comparison"
+      ],
+      "main_questions": ["Q3", "Q4"]
+    }
+  ],
+  "hard_rules": {
+    "allowed_country_codes": ["AR", "BO", "BR", "CL", "CO", "CR", "DO", "EC", "GT", "HN", "MX", "NI", "PA", "PE", "PY", "SV", "UY", "VE"],
+    "max_rate_usd_per_hour": 40,
+    "min_english_self_rating": 7,
+    "min_overlap_hours_us_eastern": 4
+  }
+}

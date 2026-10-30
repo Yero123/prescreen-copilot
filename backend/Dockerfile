@@ -9,6 +9,7 @@ COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-dev --no-install-project
 
 COPY app ./app
+COPY roles ./roles
 
 ENV PATH="/app/.venv/bin:$PATH"
 # Railway sets PORT; default to 8000 locally.

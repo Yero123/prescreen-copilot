@@ -38,6 +38,12 @@ Decisions taken, decisions rejected, and why. Newest last. Each entry: context, 
 - **Decision:** `app/llm.py` is the only module that talks to a provider. `LLM_PROVIDER=anthropic|openai` picks Claude (`messages.parse`) or OpenAI (`responses.parse`); both return the same typed `LLMResult`, so the harness never imports a vendor SDK. Claude stays the target for the submission.
 - **Consequence for evals:** the case generator must come from a different model family than the evaluator. With OpenAI evaluating, generate cases with Claude; with Claude evaluating, generate with OpenAI.
 
+## D-011 · The role is a validated config file
+- **Decision:** `backend/roles/<role-id>.json` holds the questionnaire, the criteria (`must` / `should` / `nice`, each with concrete evidence signals and the questions where evidence usually appears) and the hard rules. `app/roles.py` validates it with Pydantic on load: unique ids, at least one `must`, criteria point only to existing questions, countries as ISO 3166-1 alpha-2 codes.
+- **Why:** Changing a criterion or a rule is a data change, reviewed like data; prompts read the role instead of hardcoding it. Evidence signals turn "has real experience" into observable things (a named system, a metric, their own part), which is what makes judging specificity possible without rewarding polished writing.
+- **Bias check on criteria:** a deterministic pass flags criteria that describe a person instead of a skill ("native English speaker", age, gender, nationality, "culture fit") and suggests a skill-based rewording. It warns; it does not block.
+- **Assumption:** the allowed-country list is the Spanish- and Portuguese-speaking Latin American countries, without Cuba (US sanctions). A real deployment would take this list from the agency.
+
 ## D-009 · Stack and deploy
 - **Decision:** Python, FastAPI, Pydantic, SQLite, Docker. Backend on Railway, frontend (Vite + React) on Vercel.
 - **Rejected:** Next.js (the backend is already FastAPI); Postgres (SQLite is enough for a demo and needs no setup); Kubernetes and queues (not needed at this size).
