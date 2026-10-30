@@ -13,7 +13,7 @@ import pydantic
 from app import config
 
 T = TypeVar("T", bound=pydantic.BaseModel)
-Role = Literal["read", "evaluate"]
+Role = Literal["read", "evaluate", "write"]
 
 
 class LLMError(Exception):

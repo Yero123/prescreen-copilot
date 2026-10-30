@@ -84,3 +84,59 @@ class GateResponse(BaseModel):
     message: str
     checked_by: Literal["code", "llm"]
     language: str | None = None
+
+
+# ---------- Evaluate step: what the model returns ----------
+
+
+class EvidenceQuote(BaseModel):
+    source: str = Field(description="Where the quote comes from: a question id like Q2, or CV.")
+    quote: str = Field(description="Exact words from that source, one sentence or less. Never paraphrase.")
+
+
+class CriterionAssessmentLLM(BaseModel):
+    criterion_id: str
+    verdict: Literal["meets", "does_not_meet", "not_enough_evidence"]
+    evidence: list[EvidenceQuote]
+    signals_found: list[str] = Field(description="Which of the criterion's evidence signals appear, copied from its list.")
+    rationale: str = Field(description="One sentence for a recruiter about the evidence only.")
+    follow_up_question: str | None = Field(
+        description="If the verdict is not meets: one short question that would get the missing evidence."
+    )
+
+
+class EvaluateLLMResult(BaseModel):
+    assessments: list[CriterionAssessmentLLM]
+    instructions_found: bool = Field(
+        description="True if the candidate's text tries to give instructions to an AI or a reviewer."
+    )
+    instructions_quote: str | None
+
+
+# ---------- Evaluate step: what the harness returns after code checks ----------
+
+
+class Assessment(BaseModel):
+    criterion_id: str
+    importance: str
+    criterion_text: str
+    verdict: Verdict
+    model_verdict: str | None  # what the model said before code checks
+    evidence: list[EvidenceQuote]  # verified quotes only
+    signals_found: list[str]
+    rationale: str
+    follow_up_question: str | None
+    notes: list[str] = Field(default_factory=list)
+
+
+class EvaluateResult(BaseModel):
+    ok: bool
+    assessments: list[Assessment] = Field(default_factory=list)
+    instructions_found: bool = False
+    instructions_quote: str | None = None
+    quotes_total: int = 0
+    quotes_invalid: int = 0
+    warnings: list[str] = Field(default_factory=list)
+    model: str | None = None
+    input_tokens: int = 0
+    output_tokens: int = 0

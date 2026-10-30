@@ -7,10 +7,11 @@ LLM_PROVIDER = os.getenv("LLM_PROVIDER", "anthropic").strip().lower()
 if LLM_PROVIDER not in ("anthropic", "openai"):
     raise ValueError(f"LLM_PROVIDER must be 'anthropic' or 'openai', got {LLM_PROVIDER!r}")
 
-# Two roles: "read" is a narrow, cheap task; "evaluate" needs judgment.
+# Three roles: "read" is narrow and cheap, "evaluate" needs judgment,
+# "write" drafts short emails from verified evidence.
 _DEFAULT_MODELS = {
-    "anthropic": {"read": "claude-haiku-5-5", "evaluate": "claude-sonnet-5-5"},
-    "openai": {"read": "gpt-5-mini", "evaluate": "gpt-5"},
+    "anthropic": {"read": "claude-haiku-5-5", "evaluate": "claude-sonnet-5-5", "write": "claude-sonnet-5-5"},
+    "openai": {"read": "gpt-5-mini", "evaluate": "gpt-5", "write": "gpt-5-mini"},
 }
 
 
@@ -20,13 +21,13 @@ def model_for(role: str) -> str:
 
 
 # Claude effort per role (thinking depth and token spend).
-ANTHROPIC_EFFORT = {"read": "low", "evaluate": "medium"}
+ANTHROPIC_EFFORT = {"read": "low", "evaluate": "medium", "write": "low"}
 
 # OpenAI reasoning effort per role, applied only to reasoning models (gpt-5*, o*).
 # "read" = low: measured on the dev cases, same facts (20/20) at half the time
 # and ~45% fewer output tokens than the default. OPENAI_REASONING_EFFORT
 # overrides both roles.
-OPENAI_EFFORT = {"read": "low", "evaluate": "medium"}
+OPENAI_EFFORT = {"read": "low", "evaluate": "medium", "write": "low"}
 _OPENAI_EFFORT_OVERRIDE = os.getenv("OPENAI_REASONING_EFFORT", "").strip() or None
 
 

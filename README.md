@@ -13,9 +13,9 @@ A copilot for recruiters at a LatAm staffing agency. It reads each candidate's w
 | 3 | Sample candidates (5 handmade dev cases with labels) | done |
 | 4 | Read: structured extraction with verbatim checks | done |
 | 5 | Hard rules in code | done |
-| 6 | Evaluate each criterion with quotes | next |
-| 7 | Quote verifier | |
-| 8 | Triage + email draft | |
+| 6 | Evaluate each criterion with quotes | done |
+| 7 | Quote verifier, injection and CV-contradiction checks | done |
+| 8 | Triage + email draft | next |
 | 9 | Eval dataset (30 cases) | |
 | 10 | Eval runner + report | |
 | 11 | Recruiter UI (Vite + React) | |
