@@ -170,7 +170,9 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--split", choices=["dev", "test"], default="dev")
     parser.add_argument("--workers", type=int, default=4)
+    parser.add_argument("--label", default="", help="suffix for the output files, e.g. effort-low")
     args = parser.parse_args()
+    name = f"{args.split}-{args.label}" if args.label else args.split
 
     cases = load_cases(args.split)
     started = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
@@ -180,12 +182,12 @@ def main() -> None:
 
     m = score(rows)
     (EVALS_DIR / "results").mkdir(exist_ok=True)
-    (EVALS_DIR / "results" / f"{args.split}.json").write_text(json.dumps(
+    (EVALS_DIR / "results" / f"{name}.json").write_text(json.dumps(
         [{"case": c.id, "seconds": round(s, 1), "crash": crash,
           "result": r.model_dump(mode="json") if r else None} for c, r, s, crash in rows],
         indent=2, ensure_ascii=False), encoding="utf-8")
-    text = report(args.split, m, started)
-    (EVALS_DIR / f"report-{args.split}.md").write_text(text, encoding="utf-8")
+    text = report(name, m, started)
+    (EVALS_DIR / f"report-{name}.md").write_text(text, encoding="utf-8")
     print(text)
 
 

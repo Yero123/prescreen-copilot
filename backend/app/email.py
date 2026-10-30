@@ -117,7 +117,10 @@ def check_email(bucket: Bucket, role: Role, material: dict[str, str], draft: Ema
     unknown_ids = sorted(cited - set(material))
     evidence_ids = {k for k in material if k.startswith("E")}
     ask_ids = {k for k in material if k[0] in "MR"}
-    forbidden = [m.group(0) for pat in _FORBIDDEN for m in re.finditer(pat, text, flags=re.IGNORECASE)]
+    # A flagged word is fine when it echoes the candidate's own evidence ("supervisor-scored calls").
+    evidence_text = " ".join(v for k, v in material.items() if k.startswith("E")).lower()
+    forbidden = [m.group(0) for pat in _FORBIDDEN for m in re.finditer(pat, text, flags=re.IGNORECASE)
+                 if m.group(0).lower() not in evidence_text]
     confidential = [t for t in role.confidential_terms if t and t.lower() in text.lower()]
     protected = mentions_protected_attribute(text)
 

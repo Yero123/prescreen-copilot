@@ -83,6 +83,11 @@ Decisions taken, decisions rejected, and why. Newest last. Each entry: context, 
 - **Independence:** the evaluator runs on OpenAI; the cases and their draft labels were written by Claude (Anthropic) via Claude Code. A model tends to favor text in its own style, so the generator and the evaluator come from different families. With Claude as the evaluator, cases would be generated with OpenAI.
 - **Labels by construction, reviewed by a person:** each case was written to show one thing, and its label states it (`why`). Labels stay `draft` until reviewed; code checks that every case labels every criterion, that a labeled rule break implies `not_a_fit`, that an empty bucket means a rejected email, and that both halves of a counterfactual pair share their labels.
 
+## D-020 · Evaluation effort: low, because the verifier makes it safe
+- **Experiment** (15 dev cases, OpenAI `gpt-5`, same prompts): medium effort → verdicts 55/56, next step 15/15, 0/88 quotes dropped, median 53 s per candidate, 49k output tokens. Low effort → verdicts 55/56, next step 15/15, 2/83 quotes dropped, median 25 s, 27k output tokens.
+- **Decision:** low effort for every role. Same accuracy at about half the latency and ~45% fewer output tokens. Low effort invented two quotes; the verifier dropped both, which is exactly why the cheaper setting is safe here.
+- **Single-prompt baseline on dev** (same model, one call, no harness): verdicts 54/56 and 0/69 bad quotes, so the model alone reads well. Its weak spot is decisions: next step 12/15, with one false reject and one unsafe invite. The harness gets 15/15 because rules and triage are code.
+
 ## D-009 · Stack and deploy
 - **Decision:** Python, FastAPI, Pydantic, SQLite, Docker. Backend on Railway, frontend (Vite + React) on Vercel.
 - **Rejected:** Next.js (the backend is already FastAPI); Postgres (SQLite is enough for a demo and needs no setup); Kubernetes and queues (not needed at this size).

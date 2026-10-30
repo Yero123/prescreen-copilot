@@ -117,3 +117,9 @@ def test_confidential_client_name_fails():
 def test_role_title_with_ai_is_allowed():
     draft = email(("Your support-call QA pipeline fits this AI Engineer role well.", ["E1"]))
     assert failed(check_email("invite", ROLE, {"E1": "x"}, draft)) == []
+
+
+def test_flagged_word_is_allowed_when_it_echoes_the_candidates_evidence():
+    material = {"E1": 'Measures quality: "we compare with 200 calls that supervisors already scored"'}
+    draft = email(("I liked how you validate the model against calls your supervisors already scored.", ["E1"]))
+    assert failed(check_email("invite", ROLE, material, draft)) == []

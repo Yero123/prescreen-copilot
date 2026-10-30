@@ -57,8 +57,8 @@
       "importance": "should",
       "text": "Chooses between code, agents and retrieval on purpose",
       "evidence_signals": [
-        "gives a real example of choosing one approach over another",
-        "explains the reason (cost, reliability, exactness)"
+        "gives a real example of keeping something in plain code, using retrieval, or using an agent instead of the model",
+        "the reason is stated, or evident from the split itself (for example: exact values never pass through the model)"
       ],
       "main_questions": [
         "Q4"

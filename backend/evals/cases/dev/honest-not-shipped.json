@@ -21,12 +21,12 @@
     },
     "verdicts": {
       "shipped_llm": "does_not_meet",
-      "measures_quality": "not_enough_evidence",
-      "deliberate_design": "not_enough_evidence",
+      "measures_quality": "does_not_meet",
+      "deliberate_design": "does_not_meet",
       "open_weight": "not_enough_evidence"
     },
     "bucket": "needs_review",
-    "why": "He says plainly that he has not shipped an LLM feature to production, which contradicts a must. The model never rejects: a contradicted must goes to a person."
+    "why": "He says plainly that he has not shipped an LLM feature, that quality was only eyeballed in hackathons, and that he is still learning when to use each approach. These contradict the criteria, but the model never rejects: a contradicted must goes to a person."
   },
   "label_status": "draft"
 }

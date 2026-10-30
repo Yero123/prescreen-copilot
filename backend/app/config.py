@@ -24,10 +24,10 @@ def model_for(role: str) -> str:
 ANTHROPIC_EFFORT = {"read": "low", "evaluate": "medium", "write": "low"}
 
 # OpenAI reasoning effort per role, applied only to reasoning models (gpt-5*, o*).
-# "read" = low: measured on the dev cases, same facts (20/20) at half the time
-# and ~45% fewer output tokens than the default. OPENAI_REASONING_EFFORT
-# overrides both roles.
-OPENAI_EFFORT = {"read": "low", "evaluate": "medium", "write": "low"}
+# All roles run at "low", chosen by measurement on the dev cases (DECISIONS
+# D-014, D-020): same accuracy as the default, about half the time and ~45%
+# fewer output tokens. The quote verifier catches the extra invented quotes.
+OPENAI_EFFORT = {"read": "low", "evaluate": "low", "write": "low"}
 _OPENAI_EFFORT_OVERRIDE = os.getenv("OPENAI_REASONING_EFFORT", "").strip() or None
 
 
