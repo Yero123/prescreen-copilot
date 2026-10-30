@@ -33,7 +33,7 @@ class LLMResult(Generic[T]):
 def parse(*, role: Role, system: str, user: str, schema: type[T], max_tokens: int = 4096) -> LLMResult[T]:
     model = config.model_for(role)
     if config.LLM_PROVIDER == "openai":
-        return _parse_openai(model, system, user, schema, max_tokens)
+        return _parse_openai(model, role, system, user, schema, max_tokens)
     return _parse_anthropic(model, role, system, user, schema, max_tokens)
 
 
@@ -81,14 +81,15 @@ def _parse_anthropic(model, role, system, user, schema, max_tokens):
 _openai_client = None
 
 
-def _parse_openai(model, system, user, schema, max_tokens):
+def _parse_openai(model, role, system, user, schema, max_tokens):
     import openai
 
     global _openai_client
     if _openai_client is None:
         _openai_client = openai.OpenAI()  # reads OPENAI_API_KEY
 
-    extra = {"reasoning": {"effort": config.OPENAI_REASONING_EFFORT}} if config.OPENAI_REASONING_EFFORT else {}
+    effort = config.openai_effort(role, model)
+    extra = {"reasoning": {"effort": effort}} if effort else {}
     try:
         r = _openai_client.responses.parse(
             model=model,

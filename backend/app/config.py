@@ -22,8 +22,18 @@ def model_for(role: str) -> str:
 # Claude effort per role (thinking depth and token spend).
 ANTHROPIC_EFFORT = {"read": "low", "evaluate": "medium"}
 
-# Only for OpenAI reasoning models (e.g. "low"). Leave empty for other models.
-OPENAI_REASONING_EFFORT = os.getenv("OPENAI_REASONING_EFFORT", "").strip() or None
+# OpenAI reasoning effort per role, applied only to reasoning models (gpt-5*, o*).
+# "read" = low: measured on the dev cases, same facts (20/20) at half the time
+# and ~45% fewer output tokens than the default. OPENAI_REASONING_EFFORT
+# overrides both roles.
+OPENAI_EFFORT = {"read": "low", "evaluate": "medium"}
+_OPENAI_EFFORT_OVERRIDE = os.getenv("OPENAI_REASONING_EFFORT", "").strip() or None
+
+
+def openai_effort(role: str, model: str) -> str | None:
+    if not model.startswith(("gpt-5", "o1", "o3", "o4")):
+        return None
+    return _OPENAI_EFFORT_OVERRIDE or OPENAI_EFFORT[role]
 
 # Input guardrails: replies outside this range never reach the model.
 MIN_REPLY_CHARS = 40

@@ -49,6 +49,15 @@ Decisions taken, decisions rejected, and why. Newest last. Each entry: context, 
 - **Dev vs test:** the 5 handmade cases are the start of the dev split, used while building prompts. The test split is generated later by a model from a different family and stays untouched until the final run.
 - **Consistency checks in code:** every case labels every criterion of the role, and any case whose labeled facts break a hard rule must expect `not_a_fit`.
 
+## D-013 · Read step: the model extracts, code verifies
+- **Decision:** One call splits the reply into answers per question and extracts the hard facts (country as ISO code, rate range, English self-rating, overlap hours, claimed years), each with the exact words it came from. Code then keeps only what it can verify (`app/verify.py`): every answer must appear word for word in the email, every quote must exist, every number must literally appear in its quote, and values must be in range. Anything else is dropped and reported as a warning (`answer_not_verbatim:Q1`, `fact_unverified:rate_max_usd_per_hour`, `no_answer:Q3`).
+- **Why:** Models paraphrase, "fix" a non-native candidate's grammar, or fill a gap with a plausible number. Verbatim answers keep the candidate's own words for the evaluation step and for the recruiter; a fact that cannot be traced to the email never reaches the hard rules.
+- **Measured (dev cases, OpenAI gpt-5-mini):** 20/20 hard facts match the labels; 25/25 answers kept verbatim, including the non-native case; no warnings.
+
+## D-014 · Reasoning effort chosen by measurement
+- **Decision:** On OpenAI reasoning models the read role runs at `low` effort; evaluation keeps `medium`.
+- **Evidence:** Same 5 dev cases, same 20/20 facts: default effort took 14–25 s per case and ~1,200–1,700 output tokens; `low` took 6–11 s and ~630–870 tokens. Same quality, about half the time and cost.
+
 ## D-009 · Stack and deploy
 - **Decision:** Python, FastAPI, Pydantic, SQLite, Docker. Backend on Railway, frontend (Vite + React) on Vercel.
 - **Rejected:** Next.js (the backend is already FastAPI); Postgres (SQLite is enough for a demo and needs no setup); Kubernetes and queues (not needed at this size).

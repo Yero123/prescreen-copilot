@@ -1,4 +1,4 @@
-.PHONY: install test dev hello gate-cases models up
+.PHONY: install test dev hello gate-cases read-cases models up
 
 install:
 	cd backend && uv sync
@@ -14,6 +14,9 @@ hello:
 
 gate-cases:
 	cd backend && uv run --env-file ../.env python scripts/run_gate_on_cases.py
+
+read-cases:
+	cd backend && uv run --env-file ../.env python scripts/run_read_on_cases.py
 
 models:
 	cd backend && uv run --env-file ../.env python scripts/list_models.py
