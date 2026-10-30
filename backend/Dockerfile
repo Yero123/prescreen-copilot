@@ -10,6 +10,9 @@ RUN uv sync --frozen --no-dev --no-install-project
 
 COPY app ./app
 COPY roles ./roles
+COPY evals/__init__.py evals/cases.py ./evals/
+COPY evals/cases ./evals/cases
+COPY data/demo_seed.json ./data/demo_seed.json
 
 ENV PATH="/app/.venv/bin:$PATH"
 # Railway sets PORT; default to 8000 locally.

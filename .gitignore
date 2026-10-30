@@ -12,6 +12,7 @@ __pycache__/
 
 # Local data
 backend/data/*.db
+backend/data/*.db-*
 
 # Node (frontend, added later)
 node_modules/
