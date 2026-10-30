@@ -1,0 +1,10 @@
+# Upload only what the Dockerfile needs.
+.env*
+.venv/
+.pytest_cache/
+__pycache__/
+data/*.db
+data/*.db-*
+evals/results/
+tests/
+scripts/

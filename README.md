@@ -50,8 +50,10 @@ make up                      # the API inside Docker
 
 ## Deploy
 
-- **API → Railway**, built from `backend/Dockerfile` (it listens on `PORT`). Set the provider key, `DEMO_ACCESS_CODE`, `ALLOWED_ORIGINS` and a `DB_PATH` on a mounted volume.
-- **UI → Vercel**, root directory `frontend`, build `npm run build`, output `dist`, with `VITE_API_URL` set to the Railway URL.
+Live demo: **https://prescreen-copilot-ten.vercel.app** (asks for the access code sent with the submission). API: https://api-production-a2f0.up.railway.app/health
+
+- **API → Railway**, built from `backend/Dockerfile` (it listens on `PORT`; `backend/.railwayignore` limits the upload). A volume is mounted at `/data` with `DB_PATH=/data/app.db`, so data survives redeploys. Variables: the provider key, `DEMO_ACCESS_CODE`, `ALLOWED_ORIGINS` (the Vercel URL), `LLM_PROVIDER`. Redeploy with `cd backend && railway up --service api`.
+- **UI → Vercel**, from `frontend/` (Vite is detected: `npm run build`, output `dist`), with `VITE_API_URL` set to the Railway URL for production. Redeploy with `cd frontend && vercel deploy --prod`.
 
 ## What is real and what is stubbed
 
