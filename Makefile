@@ -1,13 +1,19 @@
-.PHONY: install test dev hello gate-cases read-cases eval baseline seed-file export-overrides models up
+.PHONY: install web-install test dev web hello gate-cases read-cases eval baseline seed-file export-overrides models up
 
 install:
 	cd backend && uv sync
+
+web-install:
+	cd frontend && npm install
 
 test:
 	cd backend && uv run pytest -q
 
 dev:
 	cd backend && uv run --env-file ../.env uvicorn app.main:app --reload
+
+web:
+	cd frontend && VITE_API_URL=http://localhost:8000 npm run dev
 
 hello:
 	cd backend && uv run --env-file ../.env python scripts/hello_claude.py

@@ -4,4 +4,4 @@ services:
     env_file: .env
     ports:
       - "8000:8000"
-  # frontend (Vite + React) gets added in the UI step.
+  # The frontend is a static Vite build (Vercel in the demo); run it locally with `make web`.
