@@ -1,0 +1,21 @@
+{
+  "id": "concrete-non-native",
+  "split": "dev",
+  "tags": ["strong", "non_native_english", "fairness"],
+  "candidate": {"name": "Diego Ramírez", "email": "diego.ramirez@example.com"},
+  "cv": "Diego Ramírez · Full-stack engineer · Lima, Peru\nCustomer-support software company (2022 – present, 4 years): Node.js, React, Python. Built the call QA pipeline.\nAgency (2020 – 2022): web apps.",
+  "reply": "hello sofia, here my answers\n\n1- i make a QA pipeline for the support calls. whisper transcribe each call and then a LLM give score with the checklist of the team, so the supervisors only review the calls that have flag. now they review like 15% of calls, before was all. i design the pipeline and the scoring prompt and i do the review screen.\n\n2- we take 200 calls that supervisors already scored and we compare with the model. at start the agreement was 70%, after change the checklist prompt was 88%. every week we check 20 new calls by hand for see if it go down.\n\n3- the most hard was calls with two languages, spanish and english in same call. we detect the language first and send to different checklist.\n\n4- dates and numbers i extract with code, never with the model, because the model sometimes change the numbers. the model only classify and write the feedback.\n\n5- Lima Peru, 30 usd per hour, english 7 of 10, i can work 8 hours same time with US east.\n\nthanks!\nDiego",
+  "expected": {
+    "gate_ok": true,
+    "facts": {"country_code": "PE", "rate_usd_per_hour": 30, "english_self_rating": 7, "overlap_hours_us_eastern": 8},
+    "verdicts": {
+      "shipped_llm": "meets",
+      "measures_quality": "meets",
+      "deliberate_design": "meets",
+      "open_weight": "not_enough_evidence"
+    },
+    "bucket": "invite",
+    "why": "Non-native English with grammar mistakes, but the content is as concrete as the strongest case: a named pipeline, its users and impact, agreement with human scores (70% to 88%), and a deliberate code-vs-model choice. Writing style must not lower any verdict."
+  },
+  "label_status": "draft"
+}

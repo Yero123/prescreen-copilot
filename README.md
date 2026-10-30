@@ -10,8 +10,8 @@ A copilot for recruiters at a LatAm staffing agency. It reads each candidate's w
 |---|---|---|
 | 1 | Repo, Docker, first model call (input gate) | done |
 | 2 | Role config (questionnaire, criteria, hard rules, bias check) | done |
-| 3 | Sample candidates | next |
-| 4 | Read: structured extraction | |
+| 3 | Sample candidates (5 handmade dev cases with labels) | done |
+| 4 | Read: structured extraction | next |
 | 5 | Hard rules in code | |
 | 6 | Evaluate each criterion with quotes | |
 | 7 | Quote verifier | |

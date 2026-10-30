@@ -4,6 +4,13 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
+# Per-criterion verdict. "needs_review" = a person must look (failed quote
+# check, contradiction, injection in that answer, or inconsistent runs).
+Verdict = Literal["meets", "does_not_meet", "not_enough_evidence", "needs_review"]
+
+# Suggested next step for the recruiter. Never a final decision.
+Bucket = Literal["invite", "more_info", "not_a_fit", "needs_review"]
+
 
 class GateLLMResult(BaseModel):
     """What the model returns when asked: is this a reply to our questionnaire?"""

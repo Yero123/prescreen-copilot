@@ -1,0 +1,21 @@
+{
+  "id": "strong-but-rule-fail",
+  "split": "dev",
+  "tags": ["knockout", "hard_rules", "strong"],
+  "candidate": {"name": "Ana Pereira", "email": "ana.pereira@example.com"},
+  "cv": "Ana Pereira · Lead AI engineer · Madrid, Spain\nLegal-tech company (2019 – present, 7 years): contract-review assistant, evaluation suites, team of 4.\nResearch assistant, university NLP lab (2017 – 2019).",
+  "reply": "Hello Sofia,\n\n1. I lead a team of four that ships a contract-review assistant used by about 40 lawyers. I designed the clause-extraction pipeline and the review interface.\n\n2. Every change runs against a golden set of 500 annotated clauses, and we track precision and recall per clause type. A change that lowers recall on termination clauses is blocked.\n\n3. Long contracts with amendments that override earlier clauses. We resolve the amendment chain before extraction, in code.\n\n4. Clause boundaries are found with rules; the model only labels clause types. We use retrieval only to show the lawyer similar past clauses.\n\n5. Madrid, Spain. 45 USD/hour. English 9/10. Around 3 hours of overlap with US Eastern.\n\nBest regards,\nAna",
+  "expected": {
+    "gate_ok": true,
+    "facts": {"country_code": "ES", "rate_usd_per_hour": 45, "english_self_rating": 9, "overlap_hours_us_eastern": 3},
+    "verdicts": {
+      "shipped_llm": "meets",
+      "measures_quality": "meets",
+      "deliberate_design": "meets",
+      "open_weight": "not_enough_evidence"
+    },
+    "bucket": "not_a_fit",
+    "why": "A strong candidate who fails three hard rules (outside Latin America, rate above $40/h, under 4 hours of overlap). The rules are checked in code, so the bucket is not_a_fit no matter how good the answers are, and the email must say which rule applies."
+  },
+  "label_status": "draft"
+}

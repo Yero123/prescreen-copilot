@@ -1,0 +1,21 @@
+{
+  "id": "polished-generic",
+  "split": "dev",
+  "tags": ["generic", "polished"],
+  "candidate": {"name": "Rafael Torres", "email": "rafael.torres@example.com"},
+  "cv": "Rafael Torres · AI Consultant · Quito, Ecuador\nFreelance (2024 – present): AI strategy and LLM solutions for clients.\nSoftware developer, retail company (2020 – 2024).",
+  "reply": "Dear Sofia,\n\nThank you for this exciting opportunity.\n\n1. I leverage cutting-edge LLMs and agentic frameworks to deliver scalable, AI-driven solutions that create measurable business value for stakeholders across industries.\n\n2. I always follow industry best practices to ensure high-quality, reliable and robust outputs, continuously iterating to exceed expectations.\n\n3. I thrive on complex challenges and have successfully navigated many of them by combining innovative thinking with a data-driven mindset.\n\n4. It really depends on the use case. I carefully evaluate each problem and select the best tool, whether that is deterministic logic, autonomous agents or retrieval-augmented generation.\n\n5. I am based in Quito, Ecuador. My rate is $28 per hour. I would rate my English 9/10, and I can work 8 hours overlapping with US Eastern time.\n\nKind regards,\nRafael",
+  "expected": {
+    "gate_ok": true,
+    "facts": {"country_code": "EC", "rate_usd_per_hour": 28, "english_self_rating": 9, "overlap_hours_us_eastern": 8},
+    "verdicts": {
+      "shipped_llm": "not_enough_evidence",
+      "measures_quality": "not_enough_evidence",
+      "deliberate_design": "not_enough_evidence",
+      "open_weight": "not_enough_evidence"
+    },
+    "bucket": "more_info",
+    "why": "Fluent and confident, but no system, user, number or real example anywhere. The copilot must not reward polish: every criterion lacks evidence, so the next step is to ask for one concrete example, not to reject."
+  },
+  "label_status": "draft"
+}
