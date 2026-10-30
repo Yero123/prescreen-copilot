@@ -36,7 +36,7 @@ def detail(sub: dict, role: Role) -> dict:
     overrides, decision, edited, approved, regenerated = _events(sub)
     raw = sub["result"]
     view = {
-        "id": sub["id"], "status": sub["status"], "received_at": sub["received_at"],
+        "id": sub["id"], "role_id": sub["role_id"], "status": sub["status"], "received_at": sub["received_at"],
         "candidate": sub["candidate"], "reply": sub["reply"], "cv": sub["cv"], "history": sub["history"],
         "overrides": overrides, "decision": decision,
         "result": None, "suggested_bucket": None, "model_bucket": None, "reasons": [],

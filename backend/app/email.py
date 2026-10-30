@@ -35,7 +35,10 @@ _RULE_QUESTION = {
 
 _FORBIDDEN = [
     r"\bsalar(y|ies)\b", r"\bcompensation\b", r"\boffer(s|ed)?\b", r"\bguarantee", r"\$\s?\d",
-    r"\bhired\b", r"\bscor(e|es|ed|ing)\b", r"\brank(ed|ing)?\b", r"\bcriteri(on|a)\b",
+    r"\bhired\b", r"\brank(ed|ing)?\b", r"\bcriteri(on|a)\b",
+    # Scoring the candidate. A bare "score" is allowed: asking an AI engineer for eval scores is fair (D-022).
+    r"\bscor(e|ed|ing)\s+(you|your|candidates?)\b", r"\b(your|you)\s+(overall\s+|final\s+|total\s+)?scor(e|es|ed)\b",
+    r"\b(we|they|it)\s+scored\b",
     # Revealing that software judged them. "AI" alone is allowed: the role is "AI Engineer".
     r"\b(our|an|the|this) (ai|automated|automatic) (tool|system|screen\w*|review\w*|assistant|check\w*)\b",
     r"\b(screened|reviewed|evaluated|assessed) by (an? )?(ai|model|algorithm|software)\b",

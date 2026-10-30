@@ -119,6 +119,16 @@ def test_role_title_with_ai_is_allowed():
     assert failed(check_email("invite", ROLE, {"E1": "x"}, draft)) == []
 
 
+def test_asking_for_eval_scores_is_allowed_but_scoring_the_candidate_is_not():
+    material = {"M1": "How did you measure quality?"}
+    ask = email(("Please share the results, for example before/after scores.", ["M1"]))
+    assert failed(check_email("more_info", ROLE, material, ask)) == []
+    for text in ("Your overall score was high.", "You scored well on our checks.", "We scored your answers."):
+        draft = email((text, ["M1"]))
+        assert "No salary, offers, scores or AI-screening language" in failed(
+            check_email("more_info", ROLE, material, draft)), text
+
+
 def test_flagged_word_is_allowed_when_it_echoes_the_candidates_evidence():
     material = {"E1": 'Measures quality: "we compare with 200 calls that supervisors already scored"'}
     draft = email(("I liked how you validate the model against calls your supervisors already scored.", ["E1"]))

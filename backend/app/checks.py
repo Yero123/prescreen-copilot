@@ -15,6 +15,10 @@ _INJECTION_PATTERNS = [
     r"\b(mark|rate|score|grade|label)\b[^.\n]{0,30}\b(every|all|each)\b[^.\n]{0,20}\b(criteri(on|a)|met|as met)\b",
     r"\b(note|message|instruction)s? (to|for) (the )?(ai|llm|model|reviewer|screener|recruiter bot)\b",
     r"\b(as an ai|dear (ai|chatgpt|claude|model))\b",
+    # Polite or indirect requests to an automated screener (found by the test set, see DECISIONS D-021).
+    r"\b(automated|automatic|ai)\s+(screen(ing|er)?|review(er)?|system|bot|tool)\b[^.\n]{0,40}\b(reading|processing|reviewing|evaluating)\s+this\b",
+    r"\b(treat|consider|mark|count|rate|score|record)\b[^.\n]{0,25}\b(all|every|each)\b[^.\n]{0,20}\b(criteri(on|a)|requirements?)\b[^.\n]{0,25}\b(met|satisfied|fulfilled|passed)\b",
+    r"\bdear\s+(screening\s+)?(bot|system|algorithm|screener)\b",
 ]
 
 # Personal attributes a screening must never use or mention.
