@@ -58,6 +58,10 @@ Decisions taken, decisions rejected, and why. Newest last. Each entry: context, 
 - **Decision:** On OpenAI reasoning models the read role runs at `low` effort; evaluation keeps `medium`.
 - **Evidence:** Same 5 dev cases, same 20/20 facts: default effort took 14–25 s per case and ~1,200–1,700 output tokens; `low` took 6–11 s and ~630–870 tokens. Same quality, about half the time and cost.
 
+## D-015 · Hard rules: missing is "unknown", ranges are judged by their low end
+- **Decision:** `app/rules.py` checks location, rate, English and overlap in plain code, only on facts that survived verification. A missing fact is `unknown` (the next step is to ask), never `fail`. A rate range passes when its lowest value fits the budget, with a note for the recruiter; it fails only when even the low end is above the limit. Limits are inclusive.
+- **Why:** Rejecting a good candidate costs more than asking one more question. Every rule result carries a plain-language detail ("$45/h > $40/h budget") so the recruiter and the candidate can be told exactly why.
+
 ## D-009 · Stack and deploy
 - **Decision:** Python, FastAPI, Pydantic, SQLite, Docker. Backend on Railway, frontend (Vite + React) on Vercel.
 - **Rejected:** Next.js (the backend is already FastAPI); Postgres (SQLite is enough for a demo and needs no setup); Kubernetes and queues (not needed at this size).
