@@ -21,3 +21,6 @@ dist/
 .DS_Store
 .idea/
 .vscode/
+
+# Full eval outputs (reports are committed)
+backend/evals/results/

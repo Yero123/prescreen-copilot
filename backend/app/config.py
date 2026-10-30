@@ -32,9 +32,11 @@ _OPENAI_EFFORT_OVERRIDE = os.getenv("OPENAI_REASONING_EFFORT", "").strip() or No
 
 
 def openai_effort(role: str, model: str) -> str | None:
+    """OPENAI_EFFORT_<ROLE> (e.g. OPENAI_EFFORT_EVALUATE=low) > OPENAI_REASONING_EFFORT > default."""
     if not model.startswith(("gpt-5", "o1", "o3", "o4")):
         return None
-    return _OPENAI_EFFORT_OVERRIDE or OPENAI_EFFORT[role]
+    per_role = os.getenv(f"OPENAI_EFFORT_{role.upper()}", "").strip() or None
+    return per_role or _OPENAI_EFFORT_OVERRIDE or OPENAI_EFFORT[role]
 
 # Input guardrails: replies outside this range never reach the model.
 MIN_REPLY_CHARS = 40

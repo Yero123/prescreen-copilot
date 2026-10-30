@@ -140,3 +140,43 @@ class EvaluateResult(BaseModel):
     model: str | None = None
     input_tokens: int = 0
     output_tokens: int = 0
+
+
+# ---------- Triage and email ----------
+
+
+class Flag(BaseModel):
+    code: str
+    message: str
+
+
+class EmailParagraphLLM(BaseModel):
+    text: str
+    based_on: list[str] = Field(
+        description="Ids of the evidence or missing items this paragraph uses (e.g. E1, M2, R1). Empty for logistics."
+    )
+
+
+class EmailLLM(BaseModel):
+    subject: str
+    paragraphs: list[EmailParagraphLLM]
+
+
+class EmailCheck(BaseModel):
+    name: str
+    passed: bool
+    detail: str | None = None
+
+
+class EmailDraft(BaseModel):
+    template: Bucket
+    written_by: Literal["code", "llm"]
+    subject: str
+    body: str
+    paragraphs: list[EmailParagraphLLM]
+    sources: dict[str, str] = Field(default_factory=dict, description="id -> what it refers to")
+    checks: list[EmailCheck]
+
+    @property
+    def passed(self) -> bool:
+        return all(c.passed for c in self.checks)

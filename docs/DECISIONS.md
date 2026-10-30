@@ -69,6 +69,15 @@ Decisions taken, decisions rejected, and why. Newest last. Each entry: context, 
 - **Injection is detected twice:** by the model (`instructions_found`) and by a regex detector in code, so a fooled model cannot hide an attempt.
 - **CV contradiction:** years claimed in the reply are compared with the span of years written in the CV; more than 2 years over flags the case for a person.
 
+## D-017 · Triage by explicit rules; rejection emails written by code
+- **Decision:** `app/triage.py` maps results to a suggested next step with ordered, readable rules: a failed step → `needs_review`; a failed hard rule → `not_a_fit`; a red flag → `needs_review`; a criterion needing a person, or a `must` the model says is not met → `needs_review`; a `must` without evidence or a missing rule fact → `more_info`; otherwise `invite`. Each bucket carries its reasons in plain language.
+- **The model never rejects:** only a rule checked in code can lead to `not_a_fit`. A model's `does_not_meet` on a `must` sends the case to a person.
+- **Emails:** `not_a_fit` is a code template whose reason is built from the failed rules, word for word. `invite` and `more_info` are written by the `write` role from numbered, verified material (E = evidence, M = missing must-have, R = missing rule fact); each paragraph lists the ids it uses. Code checks every draft: cited ids exist, an invite's personal sentence is backed by evidence, a `more_info` email asks every missing item, and there is no salary, offer, score, AI-screening language, personal attribute or confidential client name. `needs_review` gets no draft.
+
+## D-018 · The evals tested the guardrails and the role too
+- **First full dev run** (5 cases): next step 5/5, facts 20/20, verdicts 18/20, injection flagged 1/1, 0/39 model quotes failed verification.
+- **What it found and what changed:** (1) the email check banned the word "AI", but the role is "AI Engineer", so correct emails failed; the check now targets language revealing that software judged the candidate. (2) `open_weight` was ambiguous: the model counted Whisper, which is an open-weight model; the criterion now says open-weight *language* models with examples. (3) one dev case never said its product used an LLM, and the model correctly asked for evidence; the case text was fixed, not the label.
+
 ## D-009 · Stack and deploy
 - **Decision:** Python, FastAPI, Pydantic, SQLite, Docker. Backend on Railway, frontend (Vite + React) on Vercel.
 - **Rejected:** Next.js (the backend is already FastAPI); Postgres (SQLite is enough for a demo and needs no setup); Kubernetes and queues (not needed at this size).

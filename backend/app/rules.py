@@ -11,7 +11,7 @@ Two choices protect candidates from wrong rejections:
 
 from typing import Literal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, computed_field
 
 from app.roles import HardRules
 from app.schemas import ReadFacts
@@ -37,13 +37,18 @@ class RuleCheck(BaseModel):
 class RulesResult(BaseModel):
     checks: list[RuleCheck]
 
+    @computed_field
     @property
     def any_fail(self) -> bool:
         return any(c.status == "fail" for c in self.checks)
 
+    @computed_field
     @property
     def unknown(self) -> list[str]:
         return [c.rule for c in self.checks if c.status == "unknown"]
+
+    def failed(self) -> list[RuleCheck]:
+        return [c for c in self.checks if c.status == "fail"]
 
 
 def _num(value: float) -> str:

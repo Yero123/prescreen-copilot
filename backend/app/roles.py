@@ -52,6 +52,8 @@ class Role(BaseModel):
     questionnaire: list[Question] = Field(min_length=1)
     criteria: list[Criterion] = Field(min_length=1)
     hard_rules: HardRules
+    # Words that must never appear in an email to a candidate (e.g. the client's name).
+    confidential_terms: list[str] = Field(default_factory=list)
 
     @model_validator(mode="after")
     def consistent(self) -> "Role":

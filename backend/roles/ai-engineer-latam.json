@@ -34,7 +34,10 @@
         "says who used it or at what volume",
         "describes their own part, not only the team's"
       ],
-      "main_questions": ["Q1", "Q3"]
+      "main_questions": [
+        "Q1",
+        "Q3"
+      ]
     },
     {
       "id": "measures_quality",
@@ -45,7 +48,9 @@
         "names a metric and how it changed",
         "compares model output with human reviewers"
       ],
-      "main_questions": ["Q2"]
+      "main_questions": [
+        "Q2"
+      ]
     },
     {
       "id": "deliberate_design",
@@ -55,21 +60,45 @@
         "gives a real example of choosing one approach over another",
         "explains the reason (cost, reliability, exactness)"
       ],
-      "main_questions": ["Q4"]
+      "main_questions": [
+        "Q4"
+      ]
     },
     {
       "id": "open_weight",
       "importance": "nice",
-      "text": "Has tried open-weight models",
+      "text": "Has run or compared open-weight language models",
       "evidence_signals": [
-        "names an open-weight model they ran or compared",
-        "reports a result of that comparison"
+        "names an open-weight language model they ran or compared (e.g. Llama, Qwen, Mistral)",
+        "reports a result of that comparison (quality, cost or speed)"
       ],
-      "main_questions": ["Q3", "Q4"]
+      "main_questions": [
+        "Q3",
+        "Q4"
+      ]
     }
   ],
   "hard_rules": {
-    "allowed_country_codes": ["AR", "BO", "BR", "CL", "CO", "CR", "DO", "EC", "GT", "HN", "MX", "NI", "PA", "PE", "PY", "SV", "UY", "VE"],
+    "allowed_country_codes": [
+      "AR",
+      "BO",
+      "BR",
+      "CL",
+      "CO",
+      "CR",
+      "DO",
+      "EC",
+      "GT",
+      "HN",
+      "MX",
+      "NI",
+      "PA",
+      "PE",
+      "PY",
+      "SV",
+      "UY",
+      "VE"
+    ],
     "max_rate_usd_per_hour": 40,
     "min_english_self_rating": 7,
     "min_overlap_hours_us_eastern": 4
