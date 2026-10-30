@@ -1,0 +1,23 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Local data
+backend/data/*.db
+
+# Node (frontend, added later)
+node_modules/
+dist/
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
