@@ -16,8 +16,8 @@ A copilot for recruiters at a LatAm staffing agency. It reads each candidate's w
 | 6 | Evaluate each criterion with quotes | done |
 | 7 | Quote verifier, injection and CV-contradiction checks | done |
 | 8 | Triage + email draft | done |
-| 9 | Eval dataset (30 cases) | next |
-| 10 | Eval runner + report | started |
+| 9 | Eval dataset (30 cases: 15 dev, 15 test) | done |
+| 10 | Eval runner, baseline, report | next |
 | 11 | Recruiter UI (Vite + React) | |
 | 12 | README, DESIGN.md, demo video | |
 

@@ -1,0 +1,33 @@
+{
+  "id": "rule-fail-overlap",
+  "split": "test",
+  "tags": [
+    "hard_rules",
+    "strong"
+  ],
+  "candidate": {
+    "name": "Carolina Vega",
+    "email": "carolina.vega@example.com"
+  },
+  "cv": "Carolina Vega · AI engineer · Cusco, Peru\nTourism platform (2022 – present, 4 years): itinerary assistant with LLMs.",
+  "reply": "Hi Sofia,\n\n1. I built an itinerary assistant that turns a traveler's chat into a day-by-day plan with bookable activities. 15,000 travelers used it last season; I built the planner and the booking checks.\n2. We kept 200 itineraries approved by our travel experts and score each new version on feasibility and preferences covered; feasibility went from 80% to 96%.\n3. Activities that close on holidays; we check opening hours in code after the model proposes a plan.\n4. Prices and availability come from the booking API, never from the model.\n5. Cusco, Peru. $32/h. English 8/10. Because of another commitment I can only overlap 2 hours a day with US Eastern.\n\nThanks,\nCarolina",
+  "expected": {
+    "gate_ok": true,
+    "facts": {
+      "country_code": "PE",
+      "rate_usd_per_hour": 32,
+      "rate_max_usd_per_hour": null,
+      "english_self_rating": 8,
+      "overlap_hours_us_eastern": 2
+    },
+    "verdicts": {
+      "shipped_llm": "meets",
+      "measures_quality": "meets",
+      "deliberate_design": "meets",
+      "open_weight": "not_enough_evidence"
+    },
+    "bucket": "not_a_fit",
+    "why": "Strong, but only 2 hours of overlap against a 4-hour minimum. Decided by a rule in code."
+  },
+  "label_status": "draft"
+}

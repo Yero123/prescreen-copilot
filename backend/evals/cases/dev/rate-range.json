@@ -1,0 +1,33 @@
+{
+  "id": "rate-range",
+  "split": "dev",
+  "tags": [
+    "rate_range",
+    "strong"
+  ],
+  "candidate": {
+    "name": "Joaquín Ruiz",
+    "email": "joaquin.ruiz@example.com"
+  },
+  "cv": "Joaquín Ruiz · Full-stack engineer · Córdoba, Argentina\nHR-tech startup (2021 – present, 5 years): résumé parsing with LLMs, TypeScript, Python.",
+  "reply": "Hi Sofia,\n\n1) I shipped a résumé-parsing service with structured outputs and schema validation; invalid output is retried once and then sent to a person. It processes about 8,000 résumés a month for our recruiters.\n2) We measured field-level accuracy on 400 labeled résumés and publish it on an internal dashboard; it is at 95% for dates and 88% for skills.\n3) Résumés with two columns, where the text comes out mixed. We detect the layout first and read each column separately.\n4) Dates and phone numbers are parsed with regular expressions; the model only handles free-text sections.\n5) Córdoba, Argentina. My rate is between $35 and $45 per hour depending on the scope. English 8/10. 7 hours of overlap.\n\nBest regards,\nJoaquín",
+  "expected": {
+    "gate_ok": true,
+    "facts": {
+      "country_code": "AR",
+      "rate_usd_per_hour": 35,
+      "rate_max_usd_per_hour": 45,
+      "english_self_rating": 8,
+      "overlap_hours_us_eastern": 7
+    },
+    "verdicts": {
+      "shipped_llm": "meets",
+      "measures_quality": "meets",
+      "deliberate_design": "meets",
+      "open_weight": "not_enough_evidence"
+    },
+    "bucket": "invite",
+    "why": "His rate range crosses the $40 budget. The low end fits, so the rule passes with a note for the recruiter instead of rejecting a strong candidate."
+  },
+  "label_status": "draft"
+}

@@ -1,0 +1,33 @@
+{
+  "id": "spanish-reply",
+  "split": "dev",
+  "tags": [
+    "spanish",
+    "fairness"
+  ],
+  "candidate": {
+    "name": "Valentina Cruz",
+    "email": "valentina.cruz@example.com"
+  },
+  "cv": "Valentina Cruz · Ingeniera de software · Medellín, Colombia\nStartup de ventas (2022 – presente, 4 años): asistente de resúmenes de llamadas con LLM, Python, FastAPI.",
+  "reply": "Hola Sofia, respondo en español si no hay problema.\n\n1) Construí un asistente que resume llamadas de ventas con la API de OpenAI y deja las notas en el CRM. Lo usan 25 vendedores todos los días; yo hice el backend, el prompt y la integración.\n2) Armamos un set de 80 llamadas con resúmenes escritos por los vendedores y medimos cuántos datos clave capturaba el modelo: pasó de 70% a 91% después de cambiar el formato de salida.\n3) Las llamadas largas de más de una hora; las partimos por temas antes de resumir.\n4) Los montos y fechas del CRM los saca el código; el modelo solo redacta el resumen.\n5) Medellín, Colombia. 34 USD por hora. Inglés 7/10. Puedo trabajar 7 horas en horario de US Eastern.\n\nSaludos,\nValentina",
+  "expected": {
+    "gate_ok": true,
+    "facts": {
+      "country_code": "CO",
+      "rate_usd_per_hour": 34,
+      "rate_max_usd_per_hour": null,
+      "english_self_rating": 7,
+      "overlap_hours_us_eastern": 7
+    },
+    "verdicts": {
+      "shipped_llm": "meets",
+      "measures_quality": "meets",
+      "deliberate_design": "meets",
+      "open_weight": "not_enough_evidence"
+    },
+    "bucket": "invite",
+    "why": "Concrete answers written in Spanish. Language must not change any verdict: the content meets every must, so the step is the same as for an English reply."
+  },
+  "label_status": "draft"
+}

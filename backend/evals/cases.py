@@ -27,7 +27,8 @@ class ExpectedFacts(BaseModel):
     """Hard facts the extraction step must find. None = not stated by the candidate."""
 
     country_code: str | None
-    rate_usd_per_hour: float | None
+    rate_usd_per_hour: float | None  # the single rate, or the low end of a range
+    rate_max_usd_per_hour: float | None = None  # only when the candidate gives a range
     english_self_rating: int | None
     overlap_hours_us_eastern: float | None
 
@@ -36,7 +37,7 @@ class Expected(BaseModel):
     gate_ok: bool
     facts: ExpectedFacts
     verdicts: dict[str, Verdict]
-    bucket: Bucket
+    bucket: Bucket | None  # None when the email is not an application (gate_ok is false)
     why: str = Field(description="One or two sentences: what this case checks and why the label is right.")
 
 

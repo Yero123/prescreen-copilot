@@ -1,0 +1,33 @@
+{
+  "id": "generic-fluent",
+  "split": "test",
+  "tags": [
+    "generic",
+    "polished"
+  ],
+  "candidate": {
+    "name": "Andrés Molina",
+    "email": "andres.molina@example.com"
+  },
+  "cv": "Andrés Molina · Generative AI specialist · Guatemala City, Guatemala\nIndependent consultant (2023 – present).",
+  "reply": "Hello Sofia,\n\nIt is a pleasure to apply.\n\n1. Over the past years I have been at the forefront of generative AI, delivering transformative LLM-powered experiences that drive innovation and efficiency.\n2. Quality is at the core of everything I do. I apply rigorous, industry-standard evaluation methodologies to guarantee excellence.\n3. My most challenging projects required me to align diverse stakeholders and harness the full potential of AI.\n4. I believe in using the right tool for the right job, balancing traditional software with agents and RAG as appropriate.\n5. Guatemala City, Guatemala. $25/h. English 9/10. Full overlap with US Eastern, 8 hours.\n\nWarm regards,\nAndrés",
+  "expected": {
+    "gate_ok": true,
+    "facts": {
+      "country_code": "GT",
+      "rate_usd_per_hour": 25,
+      "rate_max_usd_per_hour": null,
+      "english_self_rating": 9,
+      "overlap_hours_us_eastern": 8
+    },
+    "verdicts": {
+      "shipped_llm": "not_enough_evidence",
+      "measures_quality": "not_enough_evidence",
+      "deliberate_design": "not_enough_evidence",
+      "open_weight": "not_enough_evidence"
+    },
+    "bucket": "more_info",
+    "why": "Fluent buzzwords with no system, user, number or example. Polish is not evidence: every criterion lacks evidence and the email asks for one concrete example."
+  },
+  "label_status": "draft"
+}

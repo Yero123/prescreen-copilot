@@ -1,0 +1,32 @@
+{
+  "id": "not-a-reply-ooo",
+  "split": "dev",
+  "tags": [
+    "not_a_reply"
+  ],
+  "candidate": {
+    "name": "Martín López",
+    "email": "martin.lopez@example.com"
+  },
+  "cv": "Martín López · Data engineer · Asunción, Paraguay\nLogistics company (2020 – present): data pipelines.",
+  "reply": "Thank you for your message. I am out of the office until November 10 with limited access to email. For urgent matters, please contact my colleague at logistics-support@example.com.\n\nMartín López",
+  "expected": {
+    "gate_ok": false,
+    "facts": {
+      "country_code": null,
+      "rate_usd_per_hour": null,
+      "rate_max_usd_per_hour": null,
+      "english_self_rating": null,
+      "overlap_hours_us_eastern": null
+    },
+    "verdicts": {
+      "shipped_llm": "not_enough_evidence",
+      "measures_quality": "not_enough_evidence",
+      "deliberate_design": "not_enough_evidence",
+      "open_weight": "not_enough_evidence"
+    },
+    "bucket": null,
+    "why": "An automatic out-of-office reply, not an answer to the questionnaire. The gate must stop it before any evaluation."
+  },
+  "label_status": "draft"
+}

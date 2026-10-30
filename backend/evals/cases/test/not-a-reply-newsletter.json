@@ -1,0 +1,32 @@
+{
+  "id": "not-a-reply-newsletter",
+  "split": "test",
+  "tags": [
+    "not_a_reply"
+  ],
+  "candidate": {
+    "name": "Sebastián Paredes",
+    "email": "sebastian.paredes@example.com"
+  },
+  "cv": "Sebastián Paredes · Developer · Lima, Peru",
+  "reply": "This week in crypto: Bitcoin hits a new high, three altcoins to watch, and our exclusive webinar on trading bots. Subscribe now for 50% off the premium plan! Unsubscribe at any time from your account settings.",
+  "expected": {
+    "gate_ok": false,
+    "facts": {
+      "country_code": null,
+      "rate_usd_per_hour": null,
+      "rate_max_usd_per_hour": null,
+      "english_self_rating": null,
+      "overlap_hours_us_eastern": null
+    },
+    "verdicts": {
+      "shipped_llm": "not_enough_evidence",
+      "measures_quality": "not_enough_evidence",
+      "deliberate_design": "not_enough_evidence",
+      "open_weight": "not_enough_evidence"
+    },
+    "bucket": null,
+    "why": "A newsletter, not a reply. The gate must stop it."
+  },
+  "label_status": "draft"
+}

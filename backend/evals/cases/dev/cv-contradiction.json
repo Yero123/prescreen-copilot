@@ -1,0 +1,32 @@
+{
+  "id": "cv-contradiction",
+  "split": "dev",
+  "tags": [
+    "contradiction"
+  ],
+  "candidate": {
+    "name": "Bruno Sosa",
+    "email": "bruno.sosa@example.com"
+  },
+  "cv": "Bruno Sosa · Backend developer · Montevideo, Uruguay\nE-commerce agency (2023 – present): Node.js, PostgreSQL, chatbot integrations.",
+  "reply": "Hi Sofia,\n\n1) In my 9 years building AI products I have shipped many chatbots. The latest is a support chatbot for an online shoe store that answers order and return questions for about 5,000 customers a month; I built the backend and the retrieval over the catalog.\n2) We review 50 random conversations every week against a checklist and track the share marked correct; it went from 72% to 90% after we added order lookups.\n3) Customers asking about orders by product name instead of order number. We added a lookup tool by email and product.\n4) Order status comes from the store API, never from the model.\n5) Montevideo, Uruguay, $33/h, English 8/10, 7 hours of overlap.\n\nRegards,\nBruno",
+  "expected": {
+    "gate_ok": true,
+    "facts": {
+      "country_code": "UY",
+      "rate_usd_per_hour": 33,
+      "rate_max_usd_per_hour": null,
+      "english_self_rating": 8,
+      "overlap_hours_us_eastern": 7
+    },
+    "verdicts": {
+      "shipped_llm": "meets",
+      "measures_quality": "meets",
+      "deliberate_design": "meets",
+      "open_weight": "not_enough_evidence"
+    },
+    "bucket": "needs_review",
+    "why": "Concrete answers, but the reply claims 9 years of experience while the CV starts in 2023. The copilot cannot know which is true, so a person checks before any invite."
+  },
+  "label_status": "draft"
+}

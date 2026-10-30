@@ -1,0 +1,33 @@
+{
+  "id": "rule-fail-location",
+  "split": "test",
+  "tags": [
+    "hard_rules",
+    "strong"
+  ],
+  "candidate": {
+    "name": "Ryan Mitchell",
+    "email": "ryan.mitchell@example.com"
+  },
+  "cv": "Ryan Mitchell · Senior engineer · Austin, United States\nLegal-tech startup (2018 – present, 8 years): RAG search over legal archives.",
+  "reply": "Hi Sofia,\n\n1. I built RAG search over a legal-tech startup's archive of 2 million documents; 300 paralegals use it daily. I led retrieval and ranking.\n2. We maintain 500 queries with relevance judgments from paralegals and track recall@10, which went from 0.61 to 0.83.\n3. Long documents with many near-duplicates; we deduplicate by section before indexing.\n4. Citation formatting is deterministic code; the model only writes the summary.\n5. Austin, Texas, United States. $38/hour. English 10/10. Full overlap, 8 hours.\n\nBest,\nRyan",
+  "expected": {
+    "gate_ok": true,
+    "facts": {
+      "country_code": "US",
+      "rate_usd_per_hour": 38,
+      "rate_max_usd_per_hour": null,
+      "english_self_rating": 10,
+      "overlap_hours_us_eastern": 8
+    },
+    "verdicts": {
+      "shipped_llm": "meets",
+      "measures_quality": "meets",
+      "deliberate_design": "meets",
+      "open_weight": "not_enough_evidence"
+    },
+    "bucket": "not_a_fit",
+    "why": "Strong, but based outside the role's region. A hard rule in code decides; the email names the requirement."
+  },
+  "label_status": "draft"
+}

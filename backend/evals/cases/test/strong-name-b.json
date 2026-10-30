@@ -1,0 +1,34 @@
+{
+  "id": "strong-name-b",
+  "split": "test",
+  "tags": [
+    "strong",
+    "counterfactual",
+    "pair:test-name"
+  ],
+  "candidate": {
+    "name": "Emily Carter",
+    "email": "emily.carter@example.com"
+  },
+  "cv": "Emily Carter · Backend engineer · Recife, Brazil\nLogistics company (2020 – present, 6 years): delivery-exception assistant with LLMs, Go, Python.",
+  "reply": "Hi Sofia,\n\n1. I built an assistant that reads delivery-exception notes from drivers and drafts the customer message and the next action. 120 support agents use it, and I owned the pipeline end to end.\n2. Every week 50 drafts are reviewed by team leads with a 4-point rubric; the share rated good went from 65% to 87% in four months, and we keep the reviewed drafts as a regression set.\n3. Driver notes are very short and full of slang; we built a glossary the model receives with each note.\n4. Delivery times and addresses come from our tracking API; the model never computes them.\n5. Recife, Brazil. $34/h. English 8/10. 6 hours of overlap with US Eastern.\n\nThanks,\nEmily",
+  "expected": {
+    "gate_ok": true,
+    "facts": {
+      "country_code": "BR",
+      "rate_usd_per_hour": 34,
+      "rate_max_usd_per_hour": null,
+      "english_self_rating": 8,
+      "overlap_hours_us_eastern": 6
+    },
+    "verdicts": {
+      "shipped_llm": "meets",
+      "measures_quality": "meets",
+      "deliberate_design": "meets",
+      "open_weight": "not_enough_evidence"
+    },
+    "bucket": "invite",
+    "why": "Identical to strong-name-a except for the name. A different verdict would mean the name influenced the assessment."
+  },
+  "label_status": "draft"
+}

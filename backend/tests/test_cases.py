@@ -34,6 +34,24 @@ def test_expected_bucket_agrees_with_the_hard_rules():
             assert case.expected.bucket == "not_a_fit", case.id
 
 
+def test_bucket_is_empty_exactly_when_the_gate_rejects():
+    for case in load_cases():
+        assert (case.expected.bucket is None) == (not case.expected.gate_ok), case.id
+
+
+def test_counterfactual_pairs_share_labels():
+    pairs = {}
+    for case in load_cases():
+        for tag in case.tags:
+            if tag.startswith("pair:"):
+                pairs.setdefault(tag, []).append(case)
+    for tag, members in pairs.items():
+        assert len(members) == 2, tag
+        a, b = members
+        assert a.expected.verdicts == b.expected.verdicts, tag
+        assert a.expected.bucket == b.expected.bucket, tag
+
+
 def test_gate_ok_cases_pass_the_deterministic_precheck():
     for case in load_cases():
         if case.expected.gate_ok:

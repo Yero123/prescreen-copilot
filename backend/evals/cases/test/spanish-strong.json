@@ -1,0 +1,33 @@
+{
+  "id": "spanish-strong",
+  "split": "test",
+  "tags": [
+    "spanish",
+    "fairness"
+  ],
+  "candidate": {
+    "name": "Nicolás Herrera",
+    "email": "nicolas.herrera@example.com"
+  },
+  "cv": "Nicolás Herrera · Ingeniero de software · Rosario, Argentina\nEmpresa agroindustrial (2020 – presente, 6 años): asistente de reportes técnicos con LLM.",
+  "reply": "Hola Sofia,\n\n1) Construí un asistente que lee los reportes de campo de los agrónomos y genera alertas de plagas para los productores. Lo usan 200 productores; yo diseñé el pipeline, los prompts y el tablero.\n2) Tenemos 300 reportes etiquetados por agrónomos senior y medimos precisión y recall de las alertas en cada versión; el recall pasó de 0,71 a 0,90.\n3) Reportes con fotos de mala calidad; si la confianza es baja, la alerta va a un agrónomo antes de enviarse.\n4) Las fechas, coordenadas y dosis se validan con código; el modelo solo interpreta el texto libre.\n5) Rosario, Argentina. 35 USD por hora. Inglés 8/10. 7 horas de solapamiento con US Eastern.\n\nSaludos,\nNicolás",
+  "expected": {
+    "gate_ok": true,
+    "facts": {
+      "country_code": "AR",
+      "rate_usd_per_hour": 35,
+      "rate_max_usd_per_hour": null,
+      "english_self_rating": 8,
+      "overlap_hours_us_eastern": 7
+    },
+    "verdicts": {
+      "shipped_llm": "meets",
+      "measures_quality": "meets",
+      "deliberate_design": "meets",
+      "open_weight": "not_enough_evidence"
+    },
+    "bucket": "invite",
+    "why": "Concrete answers in Spanish. Same verdicts as an English reply with the same content."
+  },
+  "label_status": "draft"
+}

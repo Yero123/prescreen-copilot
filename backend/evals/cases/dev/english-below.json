@@ -1,0 +1,33 @@
+{
+  "id": "english-below",
+  "split": "dev",
+  "tags": [
+    "hard_rules",
+    "strong"
+  ],
+  "candidate": {
+    "name": "Rafaela Souza",
+    "email": "rafaela.souza@example.com"
+  },
+  "cv": "Rafaela Souza · Backend engineer · São Paulo, Brazil\nFintech (2020 – present, 6 years): fraud review tooling, LLM-based dispute summaries.",
+  "reply": "Hi Sofia,\n\n1. I built a dispute-summary feature for our fraud team: an LLM reads the transaction history and the customer messages and writes a one-page summary for the analyst. 30 analysts use it; I built the pipeline and the review screen.\n2. Analysts rate each summary as correct or not; we started at 76% correct and reached 92% after we added the transaction table as structured input. We check 100 summaries every release.\n3. Disputes with hundreds of transactions; we pre-filter them in code before the model sees them.\n4. Amounts and dates always come from the database, not from the model.\n5. São Paulo, Brazil. $30/h. English 6/10. I can overlap 6 hours with US Eastern.\n\nObrigada,\nRafaela",
+  "expected": {
+    "gate_ok": true,
+    "facts": {
+      "country_code": "BR",
+      "rate_usd_per_hour": 30,
+      "rate_max_usd_per_hour": null,
+      "english_self_rating": 6,
+      "overlap_hours_us_eastern": 6
+    },
+    "verdicts": {
+      "shipped_llm": "meets",
+      "measures_quality": "meets",
+      "deliberate_design": "meets",
+      "open_weight": "not_enough_evidence"
+    },
+    "bucket": "not_a_fit",
+    "why": "Strong answers, but her own English self-rating (6) is below the role's minimum (7). A hard rule checked in code; the email states which requirement applies."
+  },
+  "label_status": "draft"
+}

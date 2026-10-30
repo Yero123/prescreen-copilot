@@ -1,0 +1,32 @@
+{
+  "id": "missing-rate",
+  "split": "dev",
+  "tags": [
+    "missing_fact"
+  ],
+  "candidate": {
+    "name": "Camila Rojas",
+    "email": "camila.rojas@example.com"
+  },
+  "cv": "Camila Rojas · AI engineer · Santiago, Chile\nSales-tech startup (2022 – present, 4 years): internal agents over Salesforce data, MCP servers, evaluation harnesses.",
+  "reply": "Hello Sofia,\n\n1. I built an internal agent that answers sales-ops questions from Salesforce data through an MCP server I wrote, with read-only permissions. 60 account managers use it daily.\n2. I keep 120 real questions with expected answers and run them every night; anything below 90% blocks the deploy.\n3. Questions that need data from two systems at once. I added a small tool that joins them in SQL instead of letting the model guess.\n4. Report numbers always come from SQL, never from the model; the agent only decides which query to run.\n5. I'm in Santiago, Chile. English 8/10, and I can overlap 6 hours with US Eastern. I'd prefer to discuss rate on a call.\n\nThanks!\nCamila",
+  "expected": {
+    "gate_ok": true,
+    "facts": {
+      "country_code": "CL",
+      "rate_usd_per_hour": null,
+      "rate_max_usd_per_hour": null,
+      "english_self_rating": 8,
+      "overlap_hours_us_eastern": 6
+    },
+    "verdicts": {
+      "shipped_llm": "meets",
+      "measures_quality": "meets",
+      "deliberate_design": "meets",
+      "open_weight": "not_enough_evidence"
+    },
+    "bucket": "more_info",
+    "why": "Strong on every must, but no hourly rate. A missing fact is unknown, not a failure: the email asks for the rate and nothing is rejected."
+  },
+  "label_status": "draft"
+}

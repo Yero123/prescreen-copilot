@@ -1,0 +1,32 @@
+{
+  "id": "incomplete-skipped",
+  "split": "dev",
+  "tags": [
+    "incomplete"
+  ],
+  "candidate": {
+    "name": "Valeria Gómez",
+    "email": "valeria.gomez@example.com"
+  },
+  "cv": "Valeria Gómez · Software engineer · Buenos Aires, Argentina\nE-commerce marketplace (2021 – present, 5 years): Python, Django, search and recommendations. Built an LLM product-description generator.",
+  "reply": "Hi! Sorry for the short answers, busy week.\n\n1) I built the product-description generator for our marketplace: sellers paste specs and an LLM writes the listing. About 3,000 sellers use it each month; I owned the backend and the prompt.\n\n5) Buenos Aires, Argentina. $32 per hour. English 8/10. 6 hours of overlap with US Eastern.\n\nHappy to talk more on a call.\nValeria",
+  "expected": {
+    "gate_ok": true,
+    "facts": {
+      "country_code": "AR",
+      "rate_usd_per_hour": 32,
+      "rate_max_usd_per_hour": null,
+      "english_self_rating": 8,
+      "overlap_hours_us_eastern": 6
+    },
+    "verdicts": {
+      "shipped_llm": "meets",
+      "measures_quality": "not_enough_evidence",
+      "deliberate_design": "not_enough_evidence",
+      "open_weight": "not_enough_evidence"
+    },
+    "bucket": "more_info",
+    "why": "Answers only Q1 and Q5. Shipping is clearly evidenced, but nothing shows how she measures quality (a must), so the next step is to ask. Skipped questions are not evidence against her."
+  },
+  "label_status": "draft"
+}

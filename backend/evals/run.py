@@ -39,7 +39,8 @@ def facts_of(result: ScreenResult) -> dict:
     f = result.read.facts if result.read and result.read.facts else None
     if f is None:
         return {}
-    return {"country_code": f.country_code, "rate_usd_per_hour": f.rate_max_usd_per_hour,
+    return {"country_code": f.country_code, "rate_usd_per_hour": f.rate_min_usd_per_hour,
+            "rate_max_usd_per_hour": f.rate_max_usd_per_hour,
             "english_self_rating": f.english_self_rating, "overlap_hours_us_eastern": f.overlap_hours_us_eastern}
 
 
@@ -63,7 +64,10 @@ def score(rows) -> dict:
             continue
 
         got_facts = facts_of(result)
-        for k, want in exp.facts.model_dump().items():
+        want_facts = exp.facts.model_dump()
+        if want_facts["rate_max_usd_per_hour"] is None:  # single rate: both ends equal
+            want_facts["rate_max_usd_per_hour"] = want_facts["rate_usd_per_hour"]
+        for k, want in want_facts.items():
             m["facts_total"] += 1
             m["facts_ok"] += got_facts.get(k) == want
 

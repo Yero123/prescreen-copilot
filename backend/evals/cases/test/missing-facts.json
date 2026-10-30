@@ -1,0 +1,32 @@
+{
+  "id": "missing-facts",
+  "split": "test",
+  "tags": [
+    "missing_fact"
+  ],
+  "candidate": {
+    "name": "Elena Navarro",
+    "email": "elena.navarro@example.com"
+  },
+  "cv": "Elena Navarro · Software engineer\nMedia company (2022 – present, 4 years): article tagging with LLMs.",
+  "reply": "Hi Sofia,\n\n1. I built an article-tagging service that assigns topics and named entities to every new article with an LLM; it tags about 600 articles a day for the editorial team. I owned the prompts and the API.\n2. Editors corrected tags on 300 articles, and we use them as a test set; tag precision went from 0.70 to 0.88.\n3. Breaking news with names the model has never seen; we add a lookup against our people database.\n4. Dates and article IDs are handled in code; the model only proposes tags.\n5. My rate is $31 per hour.\n\nBest,\nElena",
+  "expected": {
+    "gate_ok": true,
+    "facts": {
+      "country_code": null,
+      "rate_usd_per_hour": 31,
+      "rate_max_usd_per_hour": null,
+      "english_self_rating": null,
+      "overlap_hours_us_eastern": null
+    },
+    "verdicts": {
+      "shipped_llm": "meets",
+      "measures_quality": "meets",
+      "deliberate_design": "meets",
+      "open_weight": "not_enough_evidence"
+    },
+    "bucket": "more_info",
+    "why": "No location, English level or overlap anywhere. Three rule facts are unknown: the email must ask for each, and nothing fails."
+  },
+  "label_status": "draft"
+}

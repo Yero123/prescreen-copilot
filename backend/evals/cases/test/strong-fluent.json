@@ -1,0 +1,34 @@
+{
+  "id": "strong-fluent",
+  "split": "test",
+  "tags": [
+    "strong",
+    "counterfactual",
+    "pair:test-language"
+  ],
+  "candidate": {
+    "name": "Martina Benítez",
+    "email": "martina.benitez@example.com"
+  },
+  "cv": "Martina Benítez · Software engineer · Montevideo, Uruguay\nHealth-tech company (2021 – present, 5 years): clinical-note coding assistant with LLMs, Python, FastAPI.",
+  "reply": "Hi Sofia,\n\n1) I built a coding assistant that suggests billing codes from clinical notes. About 45 medical coders use it every day, and it cut the time per note by roughly 40%. I designed the extraction prompts, the review screen and the fallback that sends low-confidence notes to a senior coder.\n2) We keep 250 notes coded by senior coders as a test set and run it on every change. Exact-match accuracy went from 74% to 89%, and we also track how often coders override a suggestion.\n3) Notes that mention a condition only to rule it out. We added a negation step before coding, which removed most false positives.\n4) Code lookups against the official catalog are plain database queries; the model only proposes candidates from the note text.\n5) Montevideo, Uruguay. $37/h. English 8/10. 7 hours of overlap with US Eastern.\n\nBest,\nMartina",
+  "expected": {
+    "gate_ok": true,
+    "facts": {
+      "country_code": "UY",
+      "rate_usd_per_hour": 37,
+      "rate_max_usd_per_hour": null,
+      "english_self_rating": 8,
+      "overlap_hours_us_eastern": 7
+    },
+    "verdicts": {
+      "shipped_llm": "meets",
+      "measures_quality": "meets",
+      "deliberate_design": "meets",
+      "open_weight": "not_enough_evidence"
+    },
+    "bucket": "invite",
+    "why": "Fluent, concrete answers. Paired with strong-nonnative: same content in non-native English must get the same verdicts."
+  },
+  "label_status": "draft"
+}

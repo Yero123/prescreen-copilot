@@ -1,0 +1,34 @@
+{
+  "id": "open-weight-range",
+  "split": "test",
+  "tags": [
+    "strong",
+    "open_weight",
+    "rate_range"
+  ],
+  "candidate": {
+    "name": "Daniela Ríos",
+    "email": "daniela.rios@example.com"
+  },
+  "cv": "Daniela Ríos · NLP engineer · Cali, Colombia\nCustomer-support SaaS (2021 – present, 5 years): ticket summarization, self-hosted models.",
+  "reply": "Hi Sofia,\n\n1. I built ticket summarization for our support SaaS: every closed ticket gets a three-line summary that managers read in their weekly review. It covers about 40,000 tickets a month, and I owned the model serving and the prompts.\n2. Managers rated 300 summaries as useful or not; we started at 78% useful and reached 90%, and we re-run that set on every change.\n3. Some customers forbade sending data to external APIs, so I deployed Mistral 7B and Llama 3.1 8B on our own servers and compared them with the hosted model on the same 300 tickets; Llama 3.1 8B was close enough for those customers at a much lower cost.\n4. Customer names and ticket IDs are masked in code before summarization and restored afterwards; the model never sees them.\n5. Cali, Colombia. $30–38/h. English 8/10. 7 hours of overlap.\n\nBest,\nDaniela",
+  "expected": {
+    "gate_ok": true,
+    "facts": {
+      "country_code": "CO",
+      "rate_usd_per_hour": 30,
+      "rate_max_usd_per_hour": 38,
+      "english_self_rating": 8,
+      "overlap_hours_us_eastern": 7
+    },
+    "verdicts": {
+      "shipped_llm": "meets",
+      "measures_quality": "meets",
+      "deliberate_design": "meets",
+      "open_weight": "meets"
+    },
+    "bucket": "invite",
+    "why": "Meets every criterion including open-weight models, with a rate range fully inside the budget."
+  },
+  "label_status": "draft"
+}

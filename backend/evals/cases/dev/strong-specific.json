@@ -1,13 +1,25 @@
 {
   "id": "strong-specific",
   "split": "dev",
-  "tags": ["strong", "specific"],
-  "candidate": {"name": "Lucía Medina", "email": "lucia.medina@example.com"},
+  "tags": [
+    "strong",
+    "specific",
+    "pair:dev-name"
+  ],
+  "candidate": {
+    "name": "Lucía Medina",
+    "email": "lucia.medina@example.com"
+  },
   "cv": "Lucía Medina · Backend engineer · Bogotá, Colombia\nB2B support platform (2021 – present, 5 years): Python, FastAPI, PostgreSQL, AWS. Built the ticket routing service and its evaluation pipeline.\nFintech startup (2019 – 2021): Node.js APIs for payments.",
   "reply": "Hi Sofia, thanks for sending the questions. Answers below.\n\n1) I built a support-ticket triage service on the Claude API that tags and routes about 2,000 tickets a day to the right team. I owned the prompts, the tool schema and the fallback: when the model's confidence is low, the ticket goes to a human queue instead of being routed.\n\n2) We kept 300 labeled tickets as a test set and ran it on every prompt change. Routing accuracy went from 81% to 93% over three months, and we tracked how often agents re-routed a ticket by hand.\n\n3) The hardest part was tickets that mixed two problems. We split them into separate intents before routing, which cut manual re-routing by about a third.\n\n4) Routing rules that never change stay in plain code. I only used retrieval for help-center articles, because the model kept inventing policy details when it answered from memory.\n\n5) Bogotá, Colombia. $38/h. English 8/10. I can overlap 6 hours a day with US Eastern.\n\nBest,\nLucía\n\n> On Mon, Sofia Rossi wrote:\n> Please answer the five questions below so we can move forward.",
   "expected": {
     "gate_ok": true,
-    "facts": {"country_code": "CO", "rate_usd_per_hour": 38, "english_self_rating": 8, "overlap_hours_us_eastern": 6},
+    "facts": {
+      "country_code": "CO",
+      "rate_usd_per_hour": 38,
+      "english_self_rating": 8,
+      "overlap_hours_us_eastern": 6
+    },
     "verdicts": {
       "shipped_llm": "meets",
       "measures_quality": "meets",

@@ -1,0 +1,32 @@
+{
+  "id": "cv-contradiction-2",
+  "split": "test",
+  "tags": [
+    "contradiction"
+  ],
+  "candidate": {
+    "name": "Iván Torres",
+    "email": "ivan.torres@example.com"
+  },
+  "cv": "Iván Torres · Developer · Panama City, Panama\nShipping company (2022 – present): customs-document assistant with LLMs.",
+  "reply": "Hi Sofia,\n\n1) With more than 10 years building AI systems, my latest is a customs-document assistant that checks shipping manifests against invoices and flags mismatches for 25 customs brokers. I built the matching logic and the prompts.\n2) We have 200 manifests reviewed by brokers and measure the share of mismatches found; it is at 91%.\n3) Scanned manifests with handwritten corrections; we run OCR and send low-confidence fields to a broker.\n4) Quantities and weights are compared in code; the model only reads the documents.\n5) Panama City, Panama. $35/h. English 8/10. 7 hours of overlap.\n\nRegards,\nIván",
+  "expected": {
+    "gate_ok": true,
+    "facts": {
+      "country_code": "PA",
+      "rate_usd_per_hour": 35,
+      "rate_max_usd_per_hour": null,
+      "english_self_rating": 8,
+      "overlap_hours_us_eastern": 7
+    },
+    "verdicts": {
+      "shipped_llm": "meets",
+      "measures_quality": "meets",
+      "deliberate_design": "meets",
+      "open_weight": "not_enough_evidence"
+    },
+    "bucket": "needs_review",
+    "why": "Claims more than 10 years of experience; the CV shows work only since 2022. A person checks before any invite."
+  },
+  "label_status": "draft"
+}

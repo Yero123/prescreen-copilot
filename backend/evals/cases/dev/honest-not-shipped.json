@@ -1,0 +1,32 @@
+{
+  "id": "honest-not-shipped",
+  "split": "dev",
+  "tags": [
+    "does_not_meet"
+  ],
+  "candidate": {
+    "name": "Lucas Pereira",
+    "email": "lucas.pereira@example.com"
+  },
+  "cv": "Lucas Pereira · Junior developer · Arequipa, Peru\nSoftware agency (2024 – present): React and Node.js web apps.",
+  "reply": "Hello,\n\n1) To be honest, I have not shipped an LLM feature to production yet. I built two prototypes in hackathons: a chatbot over our university's course catalog and a tool that summarizes meeting notes.\n2) In the hackathons we just tried a few examples by hand to see if the answers looked right.\n3) Making the chatbot answer only from the catalog and not invent courses.\n4) I'm still learning when to use each one; in the hackathon I used retrieval for everything.\n5) Arequipa, Peru. $25 per hour. English 7/10. 8 hours of overlap with US Eastern.\n\nThank you for the opportunity,\nLucas",
+  "expected": {
+    "gate_ok": true,
+    "facts": {
+      "country_code": "PE",
+      "rate_usd_per_hour": 25,
+      "rate_max_usd_per_hour": null,
+      "english_self_rating": 7,
+      "overlap_hours_us_eastern": 8
+    },
+    "verdicts": {
+      "shipped_llm": "does_not_meet",
+      "measures_quality": "not_enough_evidence",
+      "deliberate_design": "not_enough_evidence",
+      "open_weight": "not_enough_evidence"
+    },
+    "bucket": "needs_review",
+    "why": "He says plainly that he has not shipped an LLM feature to production, which contradicts a must. The model never rejects: a contradicted must goes to a person."
+  },
+  "label_status": "draft"
+}

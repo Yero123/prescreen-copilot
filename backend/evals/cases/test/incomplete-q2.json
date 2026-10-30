@@ -1,0 +1,32 @@
+{
+  "id": "incomplete-q2",
+  "split": "test",
+  "tags": [
+    "incomplete"
+  ],
+  "candidate": {
+    "name": "Gabriel Ortiz",
+    "email": "gabriel.ortiz@example.com"
+  },
+  "cv": "Gabriel Ortiz · Backend engineer · Quito, Ecuador\nFood-delivery company (2021 – present, 5 years): menu-import pipeline with LLMs.",
+  "reply": "Hi,\n\n1) I built a pipeline that converts restaurant menus from PDFs and photos into our catalog format with an LLM. It onboarded about 1,500 restaurants this year; I owned it end to end.\n3) Menus with prices in two currencies; we normalize currencies in code after extraction.\n4) Prices are always parsed and validated in code; the model only extracts dish names and descriptions.\n5) Quito, Ecuador. $29/h. English 7/10. 8 hours overlap.\n\nGabriel",
+  "expected": {
+    "gate_ok": true,
+    "facts": {
+      "country_code": "EC",
+      "rate_usd_per_hour": 29,
+      "rate_max_usd_per_hour": null,
+      "english_self_rating": 7,
+      "overlap_hours_us_eastern": 8
+    },
+    "verdicts": {
+      "shipped_llm": "meets",
+      "measures_quality": "not_enough_evidence",
+      "deliberate_design": "meets",
+      "open_weight": "not_enough_evidence"
+    },
+    "bucket": "more_info",
+    "why": "Skips the quality question (a must). Strong elsewhere, so the email asks how he measures quality instead of rejecting."
+  },
+  "label_status": "draft"
+}
