@@ -15,5 +15,6 @@ COPY evals/cases ./evals/cases
 COPY data/demo_seed.json ./data/demo_seed.json
 
 ENV PATH="/app/.venv/bin:$PATH"
-# Railway sets PORT; default to 8000 locally.
-CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+# Railway sets PORT; default to 8000 locally. Behind Railway's proxy, trust X-Forwarded-For so the
+# per-IP limit sees each visitor, not the proxy (a spoofed header is still capped by the daily limit).
+CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000} --proxy-headers --forwarded-allow-ips '*'"]
