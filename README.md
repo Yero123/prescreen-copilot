@@ -264,7 +264,12 @@ This is the short version. The full log, with context and alternatives, is in [d
 | Redact emails and phone numbers before the model sees them | Not built. This is the first thing to do before any real data |
 | One automatic retry when a model's output fails validation | Not built. The reply goes to a person instead, which is safe but less convenient |
 | Compare an open-weight model through OpenRouter | Not built. The provider switch and the eval runner make it a small job |
-| Run the evals on Claude, the intended provider | Not measured. I only had an OpenAI key while building |
+| Turn on CircleCI | Not done. The config is in `.circleci/config.yml`, but the project is not connected, so the pipeline has never run on CircleCI. I ran the backend and frontend jobs inside CircleCI's images, and the Docker job on my own machine |
+| Run the evals on Claude, the intended provider | Not measured, and no real call to Claude has been made. I only had an OpenAI key while building. The Claude call is covered only by tests with a fake client |
+| A live screening through the Docker stack | Not tested with a real key. Without one, I checked the API, the demo data and the UI, and that a new reply ends as "Failed" |
+| Enforce the approval rules in the API | Partly. The UI blocks approving a draft that failed its checks, but the API does not. The risk is low while sending is a stub, and it must be fixed before real sending |
+| Run the API container as a non-root user | Not done. It runs as root so the Railway volume stays writable. It needs the volume permissions sorted out first |
+| Clean up the dev tooling | Not done. 5 lint warnings and 12 moderate `npm audit` advisories remain. The advisories are in dev dependencies; production has none |
 | Run each case several times to measure consistency | Not built, so run-to-run consistency is unknown |
 | A second labeler to measure agreement on the labels | Not done. The labels are still drafts |
 | Cost and prompt version on every run | Partly. Models, tokens and seconds are stored; cost and prompt version are not |
@@ -351,14 +356,14 @@ Live demo: **https://prescreen-copilot-ten.vercel.app** (asks for the access cod
 ## Known limitations
 
 - Eval labels are drafts (`label_status: draft`) until reviewed by hand, and 15 test cases are too few to show rare failures. See "What I am least sure about" in DESIGN.md.
-- The reported numbers were measured on OpenAI. Claude is the intended provider and works through the same switch, but has not been evaluated yet.
+- The reported numbers were measured on OpenAI. Claude is the intended provider and is wired through the same switch, but it has not been run against the real API or evaluated yet.
 - No redaction of emails or phone numbers before the model sees the reply.
 - Screening runs as a background task inside the API process; if the process restarts mid-screening, that row stays in "processing".
 - Injection detection is a regex net plus the model's own report. A new phrasing can get through; when it does, injected text still never counts as evidence.
 
 ## What comes next
 
-First the items under [What I planned and did not get to](#what-i-planned-and-did-not-get-to), starting with redaction and a hand review of every label. After that, the same pattern (evidence with a quote, rules in code, a person decides) extends to the candidate's follow-up reply, to matching one candidate against several client roles, and to the profile sent to the client. What I am least sure about is in [docs/DESIGN.md](docs/DESIGN.md#5-reflections).
+First the items under [What I planned and did not get to](#what-i-planned-and-did-not-get-to), starting with redaction and a hand review of every label. Connecting CircleCI is the quickest of them, and the steps are in [docs/RUNNING.md](docs/RUNNING.md#continuous-integration). After that, the same pattern (evidence with a quote, rules in code, a person decides) extends to the candidate's follow-up reply, to matching one candidate against several client roles, and to the profile sent to the client. What I am least sure about is in [docs/DESIGN.md](docs/DESIGN.md#5-reflections).
 
 ## Repo map
 
@@ -370,6 +375,6 @@ backend/scripts/      helper scripts, including make_charts.py for the README ch
 backend/tests/        deterministic tests (no API key)
 frontend/src/         the recruiter UI and its tests
 scripts/smoke.sh      checks a running Docker stack
-.circleci/            CI: tests, lint, build and Docker smoke test
+.circleci/            CI config, not connected yet: tests, lint, build and Docker smoke test
 docs/                 RUNNING.md, DESIGN.md, DECISIONS.md, AI_LOG.md, img/
 ```

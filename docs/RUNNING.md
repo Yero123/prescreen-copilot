@@ -84,7 +84,7 @@ The evals are different: `make eval SPLIT=dev` calls the real models and spends 
 
 ## Continuous integration
 
-`.circleci/config.yml` runs on every push:
+**Status: not connected yet.** The config is in the repo, but it has never run on CircleCI. Once the project is connected, `.circleci/config.yml` runs on every push:
 
 | Job | What it does |
 |---|---|
