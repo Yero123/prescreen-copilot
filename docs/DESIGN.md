@@ -16,7 +16,7 @@ The user is a recruiter, not an engineer. Their vocabulary is "invite", "ask for
 
 - **Candidates** is an inbox. Tabs by suggested next step with counts, one mark per criterion (✓ ? ✗ !), and the reason in one line when something needs a person.
 - **Review** shows the candidate's own answers on the left with the evidence highlighted, and the criteria on the right. Each verdict carries chips like `Q3 →`; clicking one scrolls to and highlights the exact words. A separate panel says *Hard rules · checked by code*. The recruiter can override any verdict (with a reason), pick the decision, and edit, regenerate or approve the email in the same screen.
-- **Add a reply** lets anyone paste a reply and a CV and watch it get screened live. Its main job is to let a reviewer try to fool it.
+- **Add a reply** lets anyone paste a reply and a CV and watch it get screened live, when the app runs with an API key (locally; the hosted demo has none). Its main job is to let a reviewer try to fool it.
 - **Role setup** shows the criteria and rules in plain language, plus a warning if a criterion contains terms that could screen people out for who they are.
 
 **How they know it worked:** every verdict shows its proof, and every email shows the checks it passed and which sentence came from which piece of evidence.
@@ -68,7 +68,7 @@ Two experiments changed the design: lower reasoning effort gave the same accurac
 
 - **Python, FastAPI, Pydantic, SQLite; Vite + React; Docker; Railway + Vercel.** Typed contracts on both sides of every model call (structured outputs parsed into Pydantic models). SQLite because a demo needs no database server.
 - **Two model sizes.** A small model for the gate, reading and emails; a larger one for evaluation. Claude is the target (Haiku / Sonnet); the evals ran on OpenAI (gpt-5-mini / gpt-5) because that was the key I had. One environment variable switches providers.
-- **Demo guardrails.** An access code and per-IP and per-day screening limits, so a public URL cannot spend the API key.
+- **Demo guardrails.** Per-IP and per-day screening limits and an optional access code, so a public URL cannot run up the API bill. The live demo goes further: it has no API key and shows demo data only.
 
 **What I chose not to do:** no RAG (the role config fits in the prompt; there is nothing to retrieve), no fine-tuning (30 cases), no agent framework (the steps are fixed, the model never chooses a tool), no scores or rankings, no AI-text detection, no automatic sending (Approve is a stub), no queues, Postgres or Kubernetes.
 
