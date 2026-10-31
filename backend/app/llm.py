@@ -49,14 +49,16 @@ def _parse_anthropic(model, role, system, user, schema, max_tokens):
     if _anthropic_client is None:
         _anthropic_client = anthropic.Anthropic()  # reads ANTHROPIC_API_KEY
 
+    effort = config.anthropic_effort(role, model)
+    extra = {"output_config": {"effort": effort}} if effort else {}
     try:
         r = _anthropic_client.messages.parse(
             model=model,
             max_tokens=max_tokens,
-            output_config={"effort": config.ANTHROPIC_EFFORT[role]},
             system=system,
             messages=[{"role": "user", "content": user}],
             output_format=schema,
+            **extra,
         )
     except anthropic.APIStatusError as e:
         raise LLMError(f"Claude returned HTTP {e.status_code}") from e

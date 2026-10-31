@@ -1,3 +1,4 @@
+import type { ButtonHTMLAttributes, ReactNode } from "react";
 import type { Bucket, Verdict } from "./types";
 
 export const BUCKET_LABEL: Record<Bucket, string> = {
@@ -30,6 +31,44 @@ export function VerdictPill({ verdict }: { verdict: Verdict }) {
     <span className={`pill ${v.cls}`}>
       {v.sym} {v.label}
     </span>
+  );
+}
+
+export function Spinner() {
+  return <span className="spinner" aria-hidden="true" />;
+}
+
+export function Loading({ children }: { children: ReactNode }) {
+  return (
+    <p className="muted loading" role="status">
+      <Spinner />
+      {children}
+    </p>
+  );
+}
+
+export function LoadButton({
+  loading,
+  loadingText,
+  disabled,
+  children,
+  ...rest
+}: ButtonHTMLAttributes<HTMLButtonElement> & { loading: boolean; loadingText: string }) {
+  return (
+    <button {...rest} disabled={disabled || loading} aria-busy={loading}>
+      {loading && <Spinner />}
+      {loading ? loadingText : children}
+    </button>
+  );
+}
+
+export function SkeletonLines({ count = 3 }: { count?: number }) {
+  return (
+    <div className="skeleton-lines" aria-hidden="true">
+      {Array.from({ length: count }, (_, i) => (
+        <span key={i} className="skeleton" />
+      ))}
+    </div>
   );
 }
 

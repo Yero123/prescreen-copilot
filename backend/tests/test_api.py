@@ -3,10 +3,12 @@
 from fastapi.testclient import TestClient
 
 import app.main as main
+import app.security as security
+from app import store
 from app.pipeline import ScreenResult
 from app.rules import check_rules
 from app.roles import load_role
-from app.schemas import Assessment, EvaluateResult, EvidenceQuote, GateResponse, ReadFacts, ReadResult
+from app.schemas import Assessment, EmailDraft, EvaluateResult, EvidenceQuote, GateResponse, ReadFacts, ReadResult
 
 ROLE = load_role("ai-engineer-latam")
 
@@ -88,9 +90,77 @@ def test_unknown_criterion_and_submission(monkeypatch):
 
 
 def test_access_code_is_enforced_when_set(monkeypatch):
-    import app.security as security
     monkeypatch.setattr(security, "ACCESS_CODE", "letmein")
     c = client(monkeypatch)
     assert c.get("/api/submissions").status_code == 401
     assert c.get("/api/submissions", headers={"X-Access-Code": "letmein"}).status_code == 200
     assert c.get("/health").status_code == 200
+
+
+def test_editing_after_approval_needs_a_new_approval(monkeypatch):
+    c = client(monkeypatch)
+    sid = c.post("/api/submissions", json={**NEW, "email": "reapprove@example.com"}).json()["id"]
+    assert c.post(f"/api/submissions/{sid}/email/approve").json()["email_approved"] is True
+    assert c.post(f"/api/submissions/{sid}/email/edit", json={"body": "New text"}).json()["email_approved"] is False
+
+
+def test_regenerate_stores_the_new_draft(monkeypatch):
+    c = client(monkeypatch)
+    draft = EmailDraft(template="invite", written_by="llm", subject="s", body="Hi", paragraphs=[], checks=[])
+    monkeypatch.setattr(main, "draft_email", lambda *args: (draft, []))
+    sid = c.post("/api/submissions", json={**NEW, "email": "regen@example.com"}).json()["id"]
+    c.post(f"/api/submissions/{sid}/email/approve")
+    after = c.post(f"/api/submissions/{sid}/email/regenerate").json()
+    assert after["email"]["body"] == "Hi" and after["email_approved"] is False
+
+
+def test_regenerate_conflicts_while_there_is_no_result(monkeypatch):
+    c = client(monkeypatch)
+    sid = store.create_submission("noresult@example.com", "N", ROLE.id, "reply", "")
+    assert c.post(f"/api/submissions/{sid}/email/regenerate").status_code == 409
+
+
+def test_a_crash_in_screening_marks_the_reply_failed(monkeypatch):
+    c = client(monkeypatch)
+
+    def boom(*args):
+        raise RuntimeError("provider down")
+
+    monkeypatch.setattr(main, "screen", boom)
+    sid = c.post("/api/submissions", json={**NEW, "email": "boom@example.com"}).json()["id"]
+    assert c.get(f"/api/submissions/{sid}").json()["status"] == "error"
+
+
+def test_unknown_role_is_rejected_before_storing(monkeypatch):
+    c = client(monkeypatch)
+    body = {**NEW, "email": "norole@example.com", "role_id": "nope"}
+    assert c.post("/api/submissions", json=body).status_code == 404
+    assert c.get("/api/roles/nope").status_code == 404
+    emails = [r["candidate"]["email"] for r in c.get("/api/submissions").json()]
+    assert "norole@example.com" not in emails
+
+
+def test_invalid_email_is_rejected(monkeypatch):
+    c = client(monkeypatch)
+    assert c.post("/api/submissions", json={**NEW, "email": "not-an-email"}).status_code == 422
+
+
+def test_samples_and_config(monkeypatch):
+    c = client(monkeypatch)
+    samples = c.get("/api/samples").json()
+    assert samples and {"id", "name", "email", "cv", "reply", "why"} <= set(samples[0])
+    assert c.get("/api/config").json()["role_id"] == ROLE.id
+
+
+def test_limit_per_address(monkeypatch):
+    monkeypatch.setattr(security, "PER_IP_PER_HOUR", 2)
+    c = client(monkeypatch)
+    codes = [c.post("/api/submissions", json={**NEW, "email": f"ip{i}@example.com"}).status_code for i in range(3)]
+    assert codes == [202, 202, 429]
+
+
+def test_daily_limit_across_addresses(monkeypatch):
+    monkeypatch.setattr(security, "PER_DAY", 1)
+    c = client(monkeypatch)
+    codes = [c.post("/api/submissions", json={**NEW, "email": f"day{i}@example.com"}).status_code for i in range(2)]
+    assert codes == [202, 429]

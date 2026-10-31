@@ -1,7 +1,32 @@
 services:
   backend:
     build: ./backend
-    env_file: .env
+    env_file:
+      - path: .env
+        required: false # without a key the demo data still works; live screening does not
+    environment:
+      DB_PATH: /data/app.db
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:5173}
     ports:
       - "8000:8000"
-  # The frontend is a static Vite build (Vercel in the demo); run it locally with `make web`.
+    volumes:
+      - app-data:/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request as u; u.urlopen('http://localhost:8000/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:8000}
+    ports:
+      - "5173:8080"
+    depends_on:
+      backend:
+        condition: service_healthy
+
+volumes:
+  app-data:

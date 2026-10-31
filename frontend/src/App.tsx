@@ -4,6 +4,7 @@ import AddReply from "./pages/AddReply";
 import Candidates from "./pages/Candidates";
 import Review from "./pages/Review";
 import RolePage from "./pages/RolePage";
+import { LoadButton } from "./ui";
 
 type Route = { page: "list" } | { page: "review"; id: number } | { page: "add" } | { page: "role" };
 
@@ -15,7 +16,7 @@ function parse(hash: string): Route {
   return { page: "list" };
 }
 
-function AccessGate({ onDone, error }: { onDone: () => void; error: string }) {
+function AccessGate({ onDone, error, checking }: { onDone: () => void; error: string; checking: boolean }) {
   const [code, setCode] = useState("");
   return (
     <main>
@@ -35,9 +36,9 @@ function AccessGate({ onDone, error }: { onDone: () => void; error: string }) {
           <input id="access-code" type="text" value={code} onChange={(e) => setCode(e.target.value)} autoFocus />
         </div>
         {error && <p className="check-bad">{error}</p>}
-        <button className="btn btn-primary" type="submit">
+        <LoadButton className="btn btn-primary" type="submit" loading={checking} loadingText="Checking…">
           Continue
-        </button>
+        </LoadButton>
       </form>
     </main>
   );
@@ -48,6 +49,7 @@ export default function App() {
   const [locked, setLocked] = useState<string | null>(null);
   const [blind, setBlind] = useState(false);
   const [probe, setProbe] = useState(0);
+  const [checking, setChecking] = useState(false);
 
   useEffect(() => {
     const onHash = () => setRoute(parse(window.location.hash));
@@ -58,15 +60,16 @@ export default function App() {
   useEffect(() => {
     api("/api/config")
       .then(() => setLocked(null))
-      .catch((e) => setLocked(e instanceof ApiError && e.status === 401 ? (probe ? e.message : "") : null));
+      .catch((e) => setLocked(e instanceof ApiError && e.status === 401 ? (probe ? e.message : "") : null))
+      .finally(() => setChecking(false));
   }, [probe]);
 
   const nav = (
     <header className="appbar">
       <div className="appbar-inner">
         <a className="brand" href="#/">
-          <span className="brand-mark" aria-hidden="true">RH</span>
-          <span style={{ fontWeight: 600 }}>Rad Hires</span>
+          <span className="brand-mark" aria-hidden="true">TM</span>
+          <span style={{ fontWeight: 600 }}>TechMaster</span>
           <span className="muted">Pre-screen copilot</span>
         </a>
         <nav className="nav" aria-label="Sections">
@@ -88,7 +91,14 @@ export default function App() {
     return (
       <>
         {nav}
-        <AccessGate error={locked} onDone={() => setProbe((n) => n + 1)} />
+        <AccessGate
+          error={locked}
+          checking={checking}
+          onDone={() => {
+            setChecking(true);
+            setProbe((n) => n + 1);
+          }}
+        />
       </>
     );
   }

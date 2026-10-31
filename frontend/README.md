@@ -5,6 +5,7 @@ Vite + React + TypeScript. No UI library: plain CSS tokens in `src/index.css`.
 ```bash
 npm install
 VITE_API_URL=http://localhost:8000 npm run dev   # http://localhost:5173
+npm test                                        # Vitest, no API needed
 npm run build                                   # static files in dist/, deployed to Vercel
 ```
 

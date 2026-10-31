@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../api";
 import type { Role } from "../types";
+import { Loading } from "../ui";
 
 type BiasWarning = { criterion_id: string; matched: string; suggestion: string };
 
@@ -19,7 +20,7 @@ export default function RolePage() {
   }, []);
 
   if (error) return <main><div className="banner banner-bad">{error}</div></main>;
-  if (!role) return <main><p className="muted">Loading…</p></main>;
+  if (!role) return <main><Loading>Loading the role…</Loading></main>;
   const rules = role.hard_rules;
 
   return (

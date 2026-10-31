@@ -19,7 +19,7 @@ The user is a recruiter, not an engineer. Their vocabulary is "invite", "ask for
 - **Add a reply** lets anyone paste a reply and a CV and watch it get screened live. Its main job is to let a reviewer try to fool it.
 - **Role setup** shows the criteria and rules in plain language, plus a warning if a criterion contains terms that could screen people out for who they are.
 
-**How they know it worked:** every verdict shows its proof, every email shows the checks it passed and which sentence came from which piece of evidence, and a "How this was checked" section lists the models, the seconds per step, the facts kept and how many model quotes the verifier dropped.
+**How they know it worked:** every verdict shows its proof, and every email shows the checks it passed and which sentence came from which piece of evidence.
 **What happens when it doesn't:** anything doubtful goes to *Needs your review* with a one-line reason in plain words ("The reply contains text aimed at the AI or a reviewer… It was treated as text and changed no verdict"). A step that fails also lands there; it never becomes an invite or a rejection. Missing facts produce an email that asks for them, never a rejection.
 
 Why a web app and not a Slack bot or a CLI: the recruiter needs to see the reply and the evidence side by side and to correct the machine. In production this screen would sit inside the agency's ATS.

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { api } from "../api";
 import type { Bucket, Row } from "../types";
-import { BucketPill, VERDICT, displayName, timeAgo } from "../ui";
+import { BucketPill, Spinner, VERDICT, displayName, timeAgo } from "../ui";
 
 type Tab = "all" | Bucket | "other";
 
@@ -107,7 +107,12 @@ export default function Candidates({ blind, onToggleBlind }: { blind: boolean; o
             <span>Next step</span>
             <span />
           </div>
-          {rows === null && !error && <p className="empty">Loading replies…</p>}
+          {rows === null && !error && (
+            <div className="empty" role="status">
+              <Spinner />
+              Loading replies…
+            </div>
+          )}
           {rows !== null && shown.length === 0 && <p className="empty">Nobody in this group right now.</p>}
           {shown.map((r) => (
             <a key={r.id} className="trow" href={`#/c/${r.id}`}>
@@ -131,7 +136,7 @@ export default function Candidates({ blind, onToggleBlind }: { blind: boolean; o
               </span>
               <span className="flag">{r.flags[0] ? `⚠ ${r.flags[0].slice(0, 70)}${r.flags[0].length > 70 ? "…" : ""}` : <span className="muted">—</span>}</span>
               <span>
-                {r.status === "processing" && <span className="pill b-none">Screening…</span>}
+                {r.status === "processing" && <span className="pill b-none"><Spinner />Screening…</span>}
                 {r.status === "error" && <span className="pill v-no">Failed · open to retry</span>}
                 {r.status === "done" && <BucketPill bucket={r.not_an_application ? null : r.decision ?? r.suggested_bucket} decided={!!r.decision} />}
               </span>

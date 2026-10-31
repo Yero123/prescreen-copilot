@@ -24,6 +24,7 @@ def _events(sub: dict):
             decision = p.get("bucket")
         elif e["kind"] == "email_edited":
             edited = p.get("body")
+            approved = False  # the approval covered the previous text
         elif e["kind"] == "email_approved":
             approved = True
         elif e["kind"] == "email_regenerated":

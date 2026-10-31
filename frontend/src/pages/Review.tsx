@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { api } from "../api";
 import type { Assessment, Bucket, Detail, Role, Verdict } from "../types";
-import { BUCKET_LABEL, BucketPill, VERDICT, VerdictPill, displayName, timeAgo } from "../ui";
+import { BUCKET_LABEL, BucketPill, LoadButton, Loading, SkeletonLines, Spinner, VERDICT, VerdictPill, displayName, timeAgo } from "../ui";
 
 type Quote = { key: string; quote: string };
 
@@ -50,17 +50,19 @@ function CriterionCard({
   overridden,
   onFocus,
   onOverride,
-  busy,
+  pending,
 }: {
   a: Assessment;
   overridden?: { verdict: Verdict; reason: string };
   onFocus: (key: string) => void;
-  onOverride: (verdict: Verdict | null, reason: string) => void;
-  busy: boolean;
+  onOverride: (verdict: Verdict | null, reason: string, action: string) => Promise<boolean>;
+  pending: string | null;
 }) {
   const [open, setOpen] = useState(false);
   const [choice, setChoice] = useState<Verdict>(a.verdict);
   const [reason, setReason] = useState("");
+  const saveKey = `override-save:${a.criterion_id}`;
+  const undoKey = `override-undo:${a.criterion_id}`;
   const original = a.notes.find((n) => n.startsWith("overridden_from:"))?.split(":")[1] as Verdict | undefined;
   return (
     <div className="crit">
@@ -111,20 +113,29 @@ function CriterionCard({
             onChange={(e) => setReason(e.target.value)}
           />
           <div className="row-wrap">
-            <button
+            <LoadButton
               className="btn btn-primary"
-              disabled={busy}
-              onClick={() => {
-                onOverride(choice, reason);
-                setOpen(false);
+              loading={pending === saveKey}
+              loadingText="Saving…"
+              disabled={pending !== null}
+              onClick={async () => {
+                if (await onOverride(choice, reason, saveKey)) setOpen(false);
               }}
             >
               Save correction
-            </button>
+            </LoadButton>
             {overridden && (
-              <button className="btn" disabled={busy} onClick={() => onOverride(null, "")}>
+              <LoadButton
+                className="btn"
+                loading={pending === undoKey}
+                loadingText="Undoing…"
+                disabled={pending !== null}
+                onClick={async () => {
+                  if (await onOverride(null, "", undoKey)) setOpen(false);
+                }}
+              >
                 Undo my correction
-              </button>
+              </LoadButton>
             )}
           </div>
         </div>
@@ -137,7 +148,7 @@ export default function Review({ id, blind }: { id: number; blind: boolean }) {
   const [d, setD] = useState<Detail | null>(null);
   const [role, setRole] = useState<Role | null>(null);
   const [error, setError] = useState("");
-  const [busy, setBusy] = useState(false);
+  const [pending, setPending] = useState<string | null>(null);
   const [focus, setFocus] = useState<string | null>(null);
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState("");
@@ -168,8 +179,8 @@ export default function Review({ id, blind }: { id: number; blind: boolean }) {
     if (focus) document.getElementById(`q-${focus}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
   }, [focus]);
 
-  const act = async (path: string, body?: unknown) => {
-    setBusy(true);
+  const act = async (action: string, path: string, body?: unknown) => {
+    setPending(action);
     setError("");
     try {
       setD(await api<Detail>(path, { method: "POST", body }));
@@ -178,8 +189,13 @@ export default function Review({ id, blind }: { id: number; blind: boolean }) {
       setError((e as Error).message);
       return false;
     } finally {
-      setBusy(false);
+      setPending(null);
     }
+  };
+
+  const writeDraft = () => {
+    setEditing(false);
+    return act("write-draft", `/api/submissions/${id}/email/regenerate`);
   };
 
   const result = d?.result ?? null;
@@ -193,13 +209,14 @@ export default function Review({ id, blind }: { id: number; blind: boolean }) {
   }, [assessments]);
 
   if (error && !d) return <main><div className="banner banner-bad">{error}</div></main>;
-  if (!d) return <main><p className="muted">Loading…</p></main>;
+  if (!d) return <main><Loading>Loading this reply…</Loading></main>;
 
   const name = displayName(d.candidate.name, d.candidate.id, blind);
   const current: Bucket | null = d.decision ?? d.suggested_bucket;
+  const busy = pending !== null;
+  const writing = pending === "write-draft";
   const questionText = (qid: string) => role?.questionnaire.find((q) => q.id === qid)?.text ?? "";
   const answers = result?.read?.answers ?? {};
-  const facts = result?.read?.facts;
 
   return (
     <main>
@@ -219,9 +236,30 @@ export default function Review({ id, blind }: { id: number; blind: boolean }) {
         {d.status === "done" && <span>Suggested: <BucketPill bucket={d.suggested_bucket} /></span>}
       </div>
 
-      {error && <div className="banner banner-bad">{error}</div>}
+      {error && <div className="banner banner-bad banner-sticky" role="alert">{error}</div>}
       {d.status === "processing" && (
-        <div className="banner banner-info">Screening this reply: reading, checking the rules and the evidence. This takes about 20–40 seconds.</div>
+        <>
+          <div className="banner banner-info" role="status">
+            <Spinner />
+            Screening this reply: reading, checking the rules and the evidence. This takes about 20–40 seconds.
+          </div>
+          <div className="split" aria-hidden="true">
+            <section className="panel">
+              <h2>Answers and CV</h2>
+              <SkeletonLines count={8} />
+            </section>
+            <div className="stack">
+              <section className="panel">
+                <h2>Criteria</h2>
+                <SkeletonLines count={5} />
+              </section>
+              <section className="panel">
+                <h2>Email draft</h2>
+                <SkeletonLines />
+              </section>
+            </div>
+          </div>
+        </>
       )}
       {d.status === "error" && <div className="banner banner-bad">Screening failed for this reply. Add it again or read it yourself.</div>}
 
@@ -286,10 +324,10 @@ export default function Review({ id, blind }: { id: number; blind: boolean }) {
                     key={a.criterion_id}
                     a={a}
                     overridden={d.overrides[a.criterion_id]}
-                    busy={busy}
+                    pending={pending}
                     onFocus={setFocus}
-                    onOverride={(verdict, reason) =>
-                      act(`/api/submissions/${d.id}/overrides`, { criterion_id: a.criterion_id, verdict, reason })
+                    onOverride={(verdict, reason, action) =>
+                      act(action, `/api/submissions/${d.id}/overrides`, { criterion_id: a.criterion_id, verdict, reason })
                     }
                   />
                 ))}
@@ -315,15 +353,17 @@ export default function Review({ id, blind }: { id: number; blind: boolean }) {
                 <h2 id="decision-title">Your decision</h2>
                 <div className="row-wrap">
                   {(["invite", "more_info", "not_a_fit"] as Bucket[]).map((b) => (
-                    <button
+                    <LoadButton
                       key={b}
                       className="btn"
                       aria-pressed={d.decision === b}
+                      loading={pending === `decision:${b}`}
+                      loadingText="Saving…"
                       disabled={busy}
-                      onClick={() => act(`/api/submissions/${d.id}/decision`, { bucket: d.decision === b ? null : b })}
+                      onClick={() => act(`decision:${b}`, `/api/submissions/${d.id}/decision`, { bucket: d.decision === b ? null : b })}
                     >
                       {b === "invite" ? "Invite to call" : b === "more_info" ? "Ask for more info" : "Not a fit"}
-                    </button>
+                    </LoadButton>
                   ))}
                 </div>
                 <p className="small muted">The copilot suggests. You decide. It never rejects anyone on its own.</p>
@@ -334,7 +374,7 @@ export default function Review({ id, blind }: { id: number; blind: boolean }) {
               <section className="panel" aria-labelledby="email-title">
                 <div className="row-wrap" style={{ justifyContent: "space-between" }}>
                   <h2 id="email-title">Email draft{d.email ? ` · ${BUCKET_LABEL[d.email.template]}` : ""}</h2>
-                  {d.email && !editing && (
+                  {d.email && !editing && !writing && (
                     <button
                       className="btn small"
                       onClick={() => {
@@ -346,26 +386,32 @@ export default function Review({ id, blind }: { id: number; blind: boolean }) {
                     </button>
                   )}
                 </div>
-                {d.email_outdated && current && (
+                {writing && (
+                  <div className="stack" style={{ gap: 12 }}>
+                    <Loading>Writing the draft. This takes about 10 seconds.</Loading>
+                    <SkeletonLines count={5} />
+                  </div>
+                )}
+                {!writing && d.email_outdated && current && (
                   <div className="banner banner-info small">
                     This draft was written for “{BUCKET_LABEL[d.email!.template]}”, but the next step is now “{BUCKET_LABEL[current]}”.{" "}
-                    <button className="btn-link" disabled={busy} onClick={() => act(`/api/submissions/${d.id}/email/regenerate`)}>
-                      {busy ? "Writing…" : "Write a new draft"}
+                    <button className="btn-link" disabled={busy} onClick={writeDraft}>
+                      Write a new draft
                     </button>
                   </div>
                 )}
-                {!d.email && current && current !== "needs_review" && (
+                {!writing && !d.email && current && current !== "needs_review" && (
                   <div className="row-wrap">
                     <p className="muted">No draft yet for this step.</p>
-                    <button className="btn" disabled={busy} onClick={() => act(`/api/submissions/${d.id}/email/regenerate`)}>
-                      {busy ? "Writing… (about 10 seconds)" : "Write a draft"}
+                    <button className="btn" disabled={busy} onClick={writeDraft}>
+                      Write a draft
                     </button>
                   </div>
                 )}
-                {!d.email && current === "needs_review" && (
+                {!writing && !d.email && current === "needs_review" && (
                   <p className="muted">This one needs your call first. Choose a decision above, then write a draft.</p>
                 )}
-                {d.email && (
+                {!writing && d.email && (
                   <>
                     <p className="small muted">To: {blind ? "hidden" : d.candidate.email} · Subject: {d.email.subject}</p>
                     {editing ? (
@@ -373,13 +419,15 @@ export default function Review({ id, blind }: { id: number; blind: boolean }) {
                         <label htmlFor="email-body">Email text</label>
                         <textarea id="email-body" rows={12} value={draft} onChange={(e) => setDraft(e.target.value)} />
                         <div className="row-wrap">
-                          <button
+                          <LoadButton
                             className="btn btn-primary"
+                            loading={pending === "edit-email"}
+                            loadingText="Saving…"
                             disabled={busy || !draft.trim()}
-                            onClick={async () => (await act(`/api/submissions/${d.id}/email/edit`, { body: draft })) && setEditing(false)}
+                            onClick={async () => (await act("edit-email", `/api/submissions/${d.id}/email/edit`, { body: draft })) && setEditing(false)}
                           >
                             Save text
-                          </button>
+                          </LoadButton>
                           <button className="btn" onClick={() => setEditing(false)}>
                             Cancel
                           </button>
@@ -425,40 +473,20 @@ export default function Review({ id, blind }: { id: number; blind: boolean }) {
                       ))}
                     </div>
                     <div className="row-wrap">
-                      <button
+                      <LoadButton
                         className="btn btn-primary"
+                        loading={pending === "approve-email"}
+                        loadingText="Sending…"
                         disabled={busy || d.email_approved || d.email.checks.some((c) => !c.passed) && !d.email_edited_body}
-                        onClick={() => act(`/api/submissions/${d.id}/email/approve`)}
+                        onClick={() => act("approve-email", `/api/submissions/${d.id}/email/approve`)}
                       >
                         {d.email_approved ? "Approved ✓" : "Approve & send"}
-                      </button>
+                      </LoadButton>
                       <span className="small muted">Sending is a stub in this prototype.</span>
                     </div>
                   </>
                 )}
               </section>
-            )}
-
-            {result && (
-              <details className="panel">
-                <summary>How this was checked</summary>
-                <div className="kv">
-                  <span className="muted">Gate</span>
-                  <span>{result.gate.code} · {result.gate.checked_by}</span>
-                  <span className="muted">Models</span>
-                  <span className="mono">read {result.read?.model ?? "—"} · evaluate {result.evaluation?.model ?? "—"}</span>
-                  <span className="muted">Seconds</span>
-                  <span>{Object.entries(result.seconds).map(([k, v]) => `${k} ${v}s`).join(" · ")}</span>
-                  <span className="muted">Model quotes dropped</span>
-                  <span>{result.evaluation ? `${result.evaluation.quotes_invalid} of ${result.evaluation.quotes_total}` : "—"}</span>
-                  <span className="muted">Facts kept</span>
-                  <span className="mono">
-                    {facts ? `${facts.country_code ?? "?"} · ${facts.rate_min_usd_per_hour ?? "?"}–${facts.rate_max_usd_per_hour ?? "?"} USD/h · English ${facts.english_self_rating ?? "?"} · overlap ${facts.overlap_hours_us_eastern ?? "?"}h` : "—"}
-                  </span>
-                  <span className="muted">Warnings</span>
-                  <span className="mono small">{result.warnings.length ? result.warnings.join(", ") : "none"}</span>
-                </div>
-              </details>
             )}
           </div>
         </div>

@@ -1,4 +1,4 @@
-.PHONY: install web-install test dev web hello gate-cases read-cases eval baseline seed-file export-overrides models up charts
+.PHONY: install web-install test dev web hello gate-cases read-cases eval baseline seed-file export-overrides models up down smoke web-test charts
 
 install:
 	cd backend && uv sync
@@ -8,6 +8,9 @@ web-install:
 
 test:
 	cd backend && uv run pytest -q
+
+web-test:
+	cd frontend && npm test
 
 dev:
 	cd backend && uv run --env-file ../.env uvicorn app.main:app --reload
@@ -46,3 +49,9 @@ models:
 
 up:
 	docker compose up --build
+
+down:
+	docker compose down
+
+smoke:
+	./scripts/smoke.sh

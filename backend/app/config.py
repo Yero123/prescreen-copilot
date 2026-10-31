@@ -10,7 +10,7 @@ if LLM_PROVIDER not in ("anthropic", "openai"):
 # Three roles: "read" is narrow and cheap, "evaluate" needs judgment,
 # "write" drafts short emails from verified evidence.
 _DEFAULT_MODELS = {
-    "anthropic": {"read": "claude-haiku-5-5", "evaluate": "claude-sonnet-5-5", "write": "claude-sonnet-5-5"},
+    "anthropic": {"read": "claude-haiku-4-5", "evaluate": "claude-sonnet-5-5", "write": "claude-sonnet-5-5"},
     "openai": {"read": "gpt-5-mini", "evaluate": "gpt-5", "write": "gpt-5-mini"},
 }
 
@@ -22,6 +22,12 @@ def model_for(role: str) -> str:
 
 # Claude effort per role (thinking depth and token spend).
 ANTHROPIC_EFFORT = {"read": "low", "evaluate": "medium", "write": "low"}
+
+
+def anthropic_effort(role: str, model: str) -> str | None:
+    """Haiku 4.5 rejects the effort parameter, so it is left out for Haiku models."""
+    return None if "haiku" in model else ANTHROPIC_EFFORT[role]
+
 
 # OpenAI reasoning effort per role, applied only to reasoning models (gpt-5*, o*).
 # All roles run at "low", chosen by measurement on the dev cases (DECISIONS

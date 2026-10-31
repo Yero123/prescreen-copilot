@@ -79,6 +79,19 @@ main { max-width: 1280px; margin: 0 auto; padding: 20px 24px 72px; display: flex
 .banner-warn { background: var(--warn-soft); border: 1px solid #edc88f; color: #5e3204; }
 .banner-info { background: var(--accent-soft); border: 1px solid #c9d2f5; color: var(--accent-ink); }
 .banner-bad { background: var(--bad-soft); border: 1px solid #efb7b7; color: var(--bad); }
+.banner-sticky { position: sticky; top: 8px; z-index: 1; }
+.demo-box { border: 1px dashed #c98a2e; border-radius: 10px; background: var(--warn-soft); color: #5e3204; padding: 10px 12px; display: flex; flex-direction: column; gap: 8px; }
+.demo-tag { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; margin-right: 8px; }
+
+/* loading */
+.spinner { display: inline-block; width: 1em; height: 1em; margin-right: 8px; vertical-align: -2px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: spin 0.7s linear infinite; }
+.pill .spinner { margin-right: 0; }
+.loading { display: flex; align-items: center; }
+.skeleton-lines { display: flex; flex-direction: column; gap: 10px; }
+.skeleton { display: block; height: 12px; border-radius: 6px; background: var(--neutral-soft); animation: pulse 1.4s ease-in-out infinite; }
+.skeleton:last-child { width: 60%; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes pulse { 50% { opacity: 0.45; } }
 
 /* funnel */
 .funnel { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 13px; }
@@ -135,10 +148,13 @@ textarea, input[type="text"], input[type="email"], select { border: 1px solid #d
 textarea { resize: vertical; line-height: 1.55; }
 label { font-size: 13px; font-weight: 500; }
 .field { display: flex; flex-direction: column; gap: 6px; }
-details summary { cursor: pointer; font-weight: 500; }
 .kv { display: grid; grid-template-columns: max-content 1fr; gap: 4px 16px; font-size: 13px; }
 
 @media (max-width: 640px) {
   main, .appbar-inner { padding-left: 16px; padding-right: 16px; }
 }
-@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+  .spinner { animation-duration: 2s; }
+  .skeleton { animation: none; }
+}
