@@ -74,7 +74,7 @@ Two experiments changed the design: lower reasoning effort gave the same accurac
 
 ## 5. Reflections
 
-**Time spent:** _TODO(Yero): fill in from Toggl_ (planning and research, plus building).
+**Time spent:** About 6 hours.
 
 **What I am least sure about.**
 - *The labels.* They were drafted by construction and are still marked `draft` until I review each one. 56/56 verdict agreement on the test set more likely means the cases are too clean than that the model is perfect. Real replies are messier: long threads, attachments, mixed languages.
