@@ -1,4 +1,4 @@
-.PHONY: install web-install test dev web hello gate-cases read-cases eval baseline seed-file export-overrides models up
+.PHONY: install web-install test dev web hello gate-cases read-cases eval baseline seed-file export-overrides models up charts
 
 install:
 	cd backend && uv sync
@@ -37,6 +37,9 @@ seed-file:
 
 export-overrides:
 	cd backend && uv run python scripts/export_overrides.py
+
+charts:
+	cd backend && uv run --with matplotlib python scripts/make_charts.py
 
 models:
 	cd backend && uv run --env-file ../.env python scripts/list_models.py

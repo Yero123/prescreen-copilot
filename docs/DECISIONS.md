@@ -45,7 +45,7 @@ Decisions taken, decisions rejected, and why. Newest last. Each entry: context, 
 - **Assumption:** the allowed-country list is the Spanish- and Portuguese-speaking Latin American countries, without Cuba (US sanctions). A real deployment would take this list from the agency.
 
 ## D-012 · Test cases carry their own labels, and labels need review
-- **Decision:** Each case (`backend/evals/cases/<split>/<id>.json`) holds the CV, the reply and the expected result: gate, hard facts, a verdict per criterion, the bucket and a one-line reason. Labels start as `draft`; only `reviewed` labels count in reported numbers.
+- **Decision:** Each case (`backend/evals/cases/<split>/<id>.json`) holds the CV, the reply and the expected result: gate, hard facts, a verdict per criterion, the bucket and a one-line reason. Labels start as `draft` until a person reviews them. The numbers reported so far are measured against draft labels, and the README and DESIGN.md say so.
 - **Dev vs test:** the 5 handmade cases are the start of the dev split, used while building prompts. The test split is generated later by a model from a different family and stays untouched until the final run.
 - **Consistency checks in code:** every case labels every criterion of the role, and any case whose labeled facts break a hard rule must expect `not_a_fit`.
 
@@ -55,7 +55,7 @@ Decisions taken, decisions rejected, and why. Newest last. Each entry: context, 
 - **Measured (dev cases, OpenAI gpt-5-mini):** 20/20 hard facts match the labels; 25/25 answers kept verbatim, including the non-native case; no warnings.
 
 ## D-014 · Reasoning effort chosen by measurement
-- **Decision:** On OpenAI reasoning models the read role runs at `low` effort; evaluation keeps `medium`.
+- **Decision:** On OpenAI reasoning models the read role runs at `low` effort; evaluation keeps `medium`. (Later moved to `low` for every role, see D-020.)
 - **Evidence:** Same 5 dev cases, same 20/20 facts: default effort took 14–25 s per case and ~1,200–1,700 output tokens; `low` took 6–11 s and ~630–870 tokens. Same quality, about half the time and cost.
 
 ## D-015 · Hard rules: missing is "unknown", ranges are judged by their low end
@@ -79,7 +79,7 @@ Decisions taken, decisions rejected, and why. Newest last. Each entry: context, 
 - **What it found and what changed:** (1) the email check banned the word "AI", but the role is "AI Engineer", so correct emails failed; the check now targets language revealing that software judged the candidate. (2) `open_weight` was ambiguous: the model counted Whisper, which is an open-weight model; the criterion now says open-weight *language* models with examples. (3) one dev case never said its product used an LLM, and the model correctly asked for evidence; the case text was fixed, not the label.
 
 ## D-019 · The eval set: 30 cases, written by a different model family than the evaluator
-- **Composition:** 15 dev cases (used while building) and 15 test cases (run only for the final numbers). They cover strong and specific answers, polished but empty answers, non-native English, Spanish, name-only and language-only counterfactual pairs, prompt injection in the answers, in the CV and as a polite "P.S. for the automated screener", each hard rule failing, rate ranges, skipped questions, missing facts, CV contradictions, a candidate who says he has not shipped, and emails that are not applications (out-of-office, newsletter).
+- **Composition:** 15 dev cases (used while building) and 15 test cases (run only for the final numbers). They cover strong and specific answers, polished but empty answers, non-native English, Spanish, name-only and language-only counterfactual pairs, prompt injection in the answers, in the CV and as a polite "P.S. for the automated screener", each hard rule failing, rate ranges, skipped questions, missing facts, CV contradictions, a candidate who says they have not shipped, and emails that are not applications (out-of-office, newsletter).
 - **Independence:** the evaluator runs on OpenAI; the cases and their draft labels were written by Claude (Anthropic) via Claude Code. A model tends to favor text in its own style, so the generator and the evaluator come from different families. With Claude as the evaluator, cases would be generated with OpenAI.
 - **Labels by construction, reviewed by a person:** each case was written to show one thing, and its label states it (`why`). Labels stay `draft` until reviewed; code checks that every case labels every criterion, that a labeled rule break implies `not_a_fit`, that an empty bucket means a rejected email, and that both halves of a counterfactual pair share their labels.
 
@@ -98,6 +98,11 @@ Decisions taken, decisions rejected, and why. Newest last. Each entry: context, 
 - **Found by the after-fix test run:** one more_info draft asked an AI engineer for "before/after scores" of their evals. The forbidden-word check flagged "scores", so a correct email failed.
 - **Decision:** the check now looks for scoring *the candidate* ("your score", "you scored", "we scored your answers") instead of the bare word. A test covers both directions. Re-running the checks on the 9 saved model-written drafts (no model call): 0 failures.
 - **Why it matters:** a guardrail that fires on correct emails trains the recruiter to ignore it. False positives are measured and fixed like any other error.
+
+## D-023 · One candidate, one history
+- **Context:** My mentor's review of the plan: if every correction or new reply creates a new case, the same person ends up duplicated with three different versions of their data.
+- **Decision:** `Candidate` (unique by email) → `Submission` (each reply they send) → `Evaluation` (each run) → events (recruiter overrides, decisions, email edits). A second reply or a correction adds to the same candidate. The review screen shows the history.
+- **Known gap:** `make export-overrides` still writes one eval case per corrected submission, so a candidate with two corrected replies gives two cases. Their ids share the candidate's slug, but they are not one case with versions yet.
 
 ## D-009 · Stack and deploy
 - **Decision:** Python, FastAPI, Pydantic, SQLite, Docker. Backend on Railway, frontend (Vite + React) on Vercel.
